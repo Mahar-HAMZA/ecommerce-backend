@@ -2,9 +2,11 @@ package com.hamza.ecommerce_backend.category.service;
 import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -26,6 +28,14 @@ public class CategoryService {
 
     public List<Category> getAllCategories(){
         return repo.findAll();
+    }
+
+    public Category getCategoryById(@PathVariable Long id){
+        Optional<Category> categoryOptional=repo.findById(id);
+        if(categoryOptional.isPresent()){
+            return categoryOptional.get();
+        }
+        throw new RuntimeException("Category not found");
     }
 
 }
