@@ -3,6 +3,7 @@ import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +31,22 @@ public class CategoryService {
         return repo.findAll();
     }
 
-    public Category getCategoryById(@PathVariable Long id){
+    public Category getCategoryById(Long id){
         Optional<Category> categoryOptional=repo.findById(id);
         if(categoryOptional.isPresent()){
             return categoryOptional.get();
+        }
+        throw new RuntimeException("Category not found");
+    }
+
+    public Category updateCategory(Long id, Category category){
+        Optional<Category> updateCategory=repo.findById(id);
+        if(updateCategory.isPresent()){
+            Category categoryUpdation=updateCategory.get();
+            categoryUpdation.setCategoryName(category.getCategoryName());
+            categoryUpdation.setDescription(category.getDescription());
+            categoryUpdation.setStatus(category.getStatus());
+            return repo.save(categoryUpdation);
         }
         throw new RuntimeException("Category not found");
     }

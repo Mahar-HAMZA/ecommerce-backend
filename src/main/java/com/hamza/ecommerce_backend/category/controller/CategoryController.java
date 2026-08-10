@@ -32,4 +32,9 @@ public class CategoryController {
         return service.getCategoryById(id);
     }
 
+    @PutMapping("/{id}")
+    public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
+        return service.updateCategory(id, category);
+    }
+
 }
