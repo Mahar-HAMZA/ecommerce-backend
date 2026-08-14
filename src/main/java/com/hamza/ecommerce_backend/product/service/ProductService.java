@@ -53,4 +53,27 @@ public class ProductService {
         }
     }
 
+    public Product updateProduct(Product product, Long id){
+        Optional<Product> product1=productRepo.findById(id);
+        Optional<Category> category1=categoryRepo.findById(product.getCategory().getId());
+        if(product1.isPresent()){
+            if(category1.isPresent()){
+                Product existProduct=product1.get();
+                existProduct.setCategory(category1.get());
+                existProduct.setProductName(product.getProductName());
+                existProduct.setDescription(product.getDescription());
+                existProduct.setStatus(product.getStatus());
+                existProduct.setPrice(product.getPrice());
+                existProduct.setStockQuantity(product.getStockQuantity());
+                return productRepo.save(existProduct);
+            }
+            else{
+                throw new RuntimeException("category does not exist.");
+            }
+        }
+        else{
+            throw new RuntimeException("Product does not exist.");
+        }
+    }
+
 }
