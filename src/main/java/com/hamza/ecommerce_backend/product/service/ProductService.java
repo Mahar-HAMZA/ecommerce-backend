@@ -4,6 +4,9 @@ import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.product.entity.Product;
 import com.hamza.ecommerce_backend.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import java.util.List;
 
 import java.util.Optional;
@@ -38,6 +41,16 @@ public class ProductService {
 
     public List<Product> getAllProducts(){
         return productRepo.findAll();
+    }
+
+    public Product getProductById(Long id){
+        Optional<Product> product=productRepo.findById(id);
+        if(product.isPresent()){
+            return product.get();
+        }
+        else{
+            throw new RuntimeException("Product does not exist.");
+        }
     }
 
 }
