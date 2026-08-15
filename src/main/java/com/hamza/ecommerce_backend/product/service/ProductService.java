@@ -76,4 +76,14 @@ public class ProductService {
         }
     }
 
+    public void deleteProduct(Long id){
+        Optional<Product> product=productRepo.findById(id);
+        if(product.isPresent()){
+            productRepo.deleteById(id);
+            return;
+        }
+        else{
+            throw new RuntimeException("Product does not exist.");
+        }
+    }
 }
