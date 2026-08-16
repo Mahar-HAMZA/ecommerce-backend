@@ -2,7 +2,7 @@ package com.hamza.ecommerce_backend.category.DTO;
 
 import com.hamza.ecommerce_backend.category.entity.CategoryStatus;
 
-public class CategoryDTO {
+public class CategoryCreateDTO {
     private String categoryName;
     private String description;
     private CategoryStatus status;

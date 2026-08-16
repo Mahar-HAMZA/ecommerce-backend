@@ -1,4 +1,7 @@
 package com.hamza.ecommerce_backend.category.service;
+import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
+import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
+import com.hamza.ecommerce_backend.category.mapper.CategoryMapper;
 import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import org.springframework.stereotype.Service;
@@ -16,25 +19,32 @@ public class CategoryService {
 
     private final CategoryRepository repo;
 
-    public CategoryService(CategoryRepository repo){
-        this.repo=repo;
+    private final CategoryMapper cateMapper;
+
+    public CategoryService(CategoryRepository repo, CategoryMapper mapper){
+        this.repo = repo;
+        this.cateMapper=mapper;
     }
 
-    public Category createCategory(Category category){
+    public CategoryDTO createCategory(CategoryCreateDTO category){
         if(repo.existsByCategoryName(category.getCategoryName())){
             throw new RuntimeException("Category already exists");
         }
-            return repo.save(category);
+        Category category1=cateMapper.toEntity(category);
+            Category category2=repo.save(category1);
+            return cateMapper.toDTO(category2);
     }
 
-    public List<Category> getAllCategories(){
-        return repo.findAll();
+    public List<CategoryDTO> getAllCategories(){
+        List<CategoryDTO> categoryList=cateMapper.allCategoriesToDTO(repo.findAll());
+        return categoryList;
     }
 
-    public Category getCategoryById(Long id){
+    public CategoryDTO getCategoryById(Long id){
         Optional<Category> categoryOptional=repo.findById(id);
         if(categoryOptional.isPresent()){
-            return categoryOptional.get();
+            Category category1=categoryOptional.get();
+            return cateMapper.toDTO(category1);
         }
         throw new RuntimeException("Category not found");
     }

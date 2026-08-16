@@ -1,5 +1,7 @@
 package com.hamza.ecommerce_backend.category.controller;
 
+import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
+import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import com.hamza.ecommerce_backend.category.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +19,18 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category){
+    public CategoryDTO createCategory(@RequestBody CategoryCreateDTO category){
 
         return service.createCategory(category);
     }
 
     @GetMapping
-    public List<Category> getAllCategories(){
+    public List<CategoryDTO> getAllCategories(){
         return service.getAllCategories();
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable Long id){
+    public CategoryDTO getCategoryById(@PathVariable Long id){
         return service.getCategoryById(id);
     }
 
