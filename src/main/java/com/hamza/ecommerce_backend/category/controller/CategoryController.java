@@ -5,6 +5,7 @@ import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryUpdateDTO;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import com.hamza.ecommerce_backend.category.service.CategoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,8 +42,9 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable Long id){
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id){
         service.deleteCategory(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
