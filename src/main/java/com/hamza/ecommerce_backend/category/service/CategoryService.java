@@ -1,6 +1,7 @@
 package com.hamza.ecommerce_backend.category.service;
 import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
+import com.hamza.ecommerce_backend.category.DTO.CategoryUpdateDTO;
 import com.hamza.ecommerce_backend.category.mapper.CategoryMapper;
 import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.category.entity.Category;
@@ -49,14 +50,12 @@ public class CategoryService {
         throw new RuntimeException("Category not found");
     }
 
-    public Category updateCategory(Long id, Category category){
+    public CategoryDTO updateCategory(Long id, CategoryUpdateDTO category){
         Optional<Category> updateCategory=repo.findById(id);
         if(updateCategory.isPresent()){
-            Category categoryUpdation=updateCategory.get();
-            categoryUpdation.setCategoryName(category.getCategoryName());
-            categoryUpdation.setDescription(category.getDescription());
-            categoryUpdation.setStatus(category.getStatus());
-            return repo.save(categoryUpdation);
+            Category categoryUpdation=cateMapper.updateCategory(updateCategory.get(), category);
+            repo.save(categoryUpdation);
+            return cateMapper.toDTO(categoryUpdation);
         }
         throw new RuntimeException("Category not found");
     }

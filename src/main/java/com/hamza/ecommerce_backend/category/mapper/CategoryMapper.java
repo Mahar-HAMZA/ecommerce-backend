@@ -2,6 +2,7 @@ package com.hamza.ecommerce_backend.category.mapper;
 
 import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
+import com.hamza.ecommerce_backend.category.DTO.CategoryUpdateDTO;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,13 @@ public class CategoryMapper {
         category.setCategoryName(dto.getCategoryName());
         category.setDescription(dto.getDescription());
         category.setStatus(dto.getStatus());
+        return category;
+    }
+
+    public Category updateCategory(Category category, CategoryUpdateDTO updateDto){
+        category.setCategoryName(updateDto.getCategoryName());
+        category.setDescription(updateDto.getDescription());
+        category.setStatus(updateDto.getStatus());
         return category;
     }
 }

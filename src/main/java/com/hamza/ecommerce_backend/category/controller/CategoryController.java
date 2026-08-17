@@ -2,6 +2,7 @@ package com.hamza.ecommerce_backend.category.controller;
 
 import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
+import com.hamza.ecommerce_backend.category.DTO.CategoryUpdateDTO;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import com.hamza.ecommerce_backend.category.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +36,8 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
-        return service.updateCategory(id, category);
+    public CategoryDTO updateCategory(@PathVariable Long id, @RequestBody CategoryUpdateDTO updateCategory){
+        return service.updateCategory(id, updateCategory);
     }
 
     @DeleteMapping("/{id}")
