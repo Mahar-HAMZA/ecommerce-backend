@@ -2,6 +2,7 @@ package com.hamza.ecommerce_backend.category.service;
 import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryUpdateDTO;
+import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsException;
 import com.hamza.ecommerce_backend.category.mapper.CategoryMapper;
 import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.category.entity.Category;
@@ -29,7 +30,7 @@ public class CategoryService {
 
     public CategoryDTO createCategory(CategoryCreateDTO category){
         if(repo.existsByCategoryName(category.getCategoryName())){
-            throw new RuntimeException("Category already exists");
+            throw new CategoryAlreadyExistsException("Category already exists");
         }
         Category category1=cateMapper.toEntity(category);
             Category category2=repo.save(category1);
