@@ -3,6 +3,7 @@ import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryUpdateDTO;
 import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsException;
+import com.hamza.ecommerce_backend.category.exception.CategoryNotFoundException;
 import com.hamza.ecommerce_backend.category.mapper.CategoryMapper;
 import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.category.entity.Category;
@@ -48,17 +49,22 @@ public class CategoryService {
             Category category1=categoryOptional.get();
             return cateMapper.toDTO(category1);
         }
-        throw new RuntimeException("Category not found");
+        throw new CategoryNotFoundException("Category not found");
     }
 
     public CategoryDTO updateCategory(Long id, CategoryUpdateDTO category){
         Optional<Category> updateCategory=repo.findById(id);
         if(updateCategory.isPresent()){
-            Category categoryUpdation=cateMapper.updateCategory(updateCategory.get(), category);
-            repo.save(categoryUpdation);
-            return cateMapper.toDTO(categoryUpdation);
+            if (repo.existsByCategoryNameAndIdNot(category.getCategoryName(), id)) {
+                throw new CategoryAlreadyExistsException("Category already exists");
+            }
+            else {
+                Category categoryUpdation = cateMapper.updateCategory(updateCategory.get(), category);
+                repo.save(categoryUpdation);
+                return cateMapper.toDTO(categoryUpdation);
+            }
         }
-        throw new RuntimeException("Category not found");
+        throw new CategoryNotFoundException("Category not found");
     }
 
     public void deleteCategory(Long id){
@@ -67,7 +73,7 @@ public class CategoryService {
             repo.deleteById(id);
             return;
         }
-        throw new RuntimeException("Category not found");
+        throw new CategoryNotFoundException("Category not found");
     }
 
 }
