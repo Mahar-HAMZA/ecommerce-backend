@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public ResponseEntity<String> handle(CategoryAlreadyExistsException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    public ResponseEntity<CategoryExceptionResponse> handle(CategoryAlreadyExistsException ex) {
+        //return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        CategoryExceptionResponse response=
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<String> notFound(CategoryNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> generalException(Exception ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 }
