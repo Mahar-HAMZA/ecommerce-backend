@@ -11,16 +11,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CategoryAlreadyExistsException.class)
     public ResponseEntity<CategoryExceptionResponse> handle(CategoryAlreadyExistsException ex) {
         //return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        CategoryExceptionResponse response=
+        CategoryExceptionResponse response=new CategoryExceptionResponse(409, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<String> notFound(CategoryNotFoundException ex){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    public ResponseEntity<CategoryExceptionResponse> notFound(CategoryNotFoundException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(404, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> generalException(Exception ex){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    public ResponseEntity<CategoryExceptionResponse> generalException(Exception ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(500, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
