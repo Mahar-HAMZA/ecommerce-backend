@@ -1,8 +1,12 @@
 package com.hamza.ecommerce_backend.category.DTO;
 
 import com.hamza.ecommerce_backend.category.entity.CategoryStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class CategoryCreateDTO {
+
+    @NotBlank(message = "Category name must not be blank") @Size(max = 100, message = "Category name must not exceed 100 characters.")
     private String categoryName;
     private String description;
     private CategoryStatus status;

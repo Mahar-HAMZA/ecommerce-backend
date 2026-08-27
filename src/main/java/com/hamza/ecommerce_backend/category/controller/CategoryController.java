@@ -3,8 +3,8 @@ package com.hamza.ecommerce_backend.category.controller;
 import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryUpdateDTO;
-import com.hamza.ecommerce_backend.category.entity.Category;
 import com.hamza.ecommerce_backend.category.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryDTO createCategory(@RequestBody CategoryCreateDTO category){
+    public CategoryDTO createCategory(@RequestBody @Valid CategoryCreateDTO category){
 
         return service.createCategory(category);
     }

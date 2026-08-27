@@ -32,7 +32,9 @@ public class CategoryMapper {
         Category category=new Category();
         category.setCategoryName(dto.getCategoryName());
         category.setDescription(dto.getDescription());
-        category.setStatus(dto.getStatus());
+        if(dto.getStatus() != null){
+            category.setStatus(dto.getStatus());
+        }
         return category;
     }
 

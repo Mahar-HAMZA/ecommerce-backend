@@ -20,7 +20,7 @@ public class Category {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private CategoryStatus status;
+    private CategoryStatus status=CategoryStatus.ACTIVE;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
