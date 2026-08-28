@@ -33,4 +33,10 @@ public class GlobalExceptionHandler {
         CategoryExceptionResponse response=new CategoryExceptionResponse(400, ex.getBindingResult().getFieldError().getDefaultMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+    @ExceptionHandler(CategoryDeletionNotAllowedException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleDeletionException(CategoryDeletionNotAllowedException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(409, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
 }

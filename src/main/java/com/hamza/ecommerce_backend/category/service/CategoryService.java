@@ -3,10 +3,12 @@ import com.hamza.ecommerce_backend.category.DTO.CategoryCreateDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryDTO;
 import com.hamza.ecommerce_backend.category.DTO.CategoryUpdateDTO;
 import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsException;
+import com.hamza.ecommerce_backend.category.exception.CategoryDeletionNotAllowedException;
 import com.hamza.ecommerce_backend.category.exception.CategoryNotFoundException;
 import com.hamza.ecommerce_backend.category.mapper.CategoryMapper;
 import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.category.entity.Category;
+import com.hamza.ecommerce_backend.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,9 +26,12 @@ public class CategoryService {
 
     private final CategoryMapper cateMapper;
 
-    public CategoryService(CategoryRepository repo, CategoryMapper mapper){
+    private ProductRepository productRepo;
+
+    public CategoryService(CategoryRepository repo, CategoryMapper mapper, ProductRepository productRepo){
         this.repo = repo;
         this.cateMapper=mapper;
+        this.productRepo=productRepo;
     }
 
     public CategoryDTO createCategory(CategoryCreateDTO category){
@@ -70,8 +75,11 @@ public class CategoryService {
     public void deleteCategory(Long id){
         Optional<Category> category=repo.findById(id);
         if(category.isPresent()){
-            repo.deleteById(id);
-            return;
+            if(!productRepo.existsBycategory_Id(id)) {
+                repo.deleteById(id);
+                return;
+            }
+                throw new CategoryDeletionNotAllowedException("Cannot delete category because it contains products");
         }
         throw new CategoryNotFoundException("Category not found");
     }

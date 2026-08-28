@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     public boolean existsByProductName(String productName);
+    public boolean existsBycategory_Id(Long categoryId);
 }
