@@ -39,9 +39,15 @@ public class CategoryMapper {
     }
 
     public Category updateCategory(Category category, CategoryUpdateDTO updateDto){
-        category.setCategoryName(updateDto.getCategoryName());
-        category.setDescription(updateDto.getDescription());
-        category.setStatus(updateDto.getStatus());
+        if(updateDto.getCategoryName() != null){
+            category.setCategoryName(updateDto.getCategoryName());
+        }
+        if(updateDto.getDescription() != null){
+            category.setDescription(updateDto.getDescription());
+        }
+        if(updateDto.getStatus() != null){
+            category.setStatus(updateDto.getStatus());
+        }
         return category;
     }
 }

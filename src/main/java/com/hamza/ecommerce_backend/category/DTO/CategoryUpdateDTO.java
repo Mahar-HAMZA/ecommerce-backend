@@ -1,9 +1,13 @@
 package com.hamza.ecommerce_backend.category.DTO;
 
 import com.hamza.ecommerce_backend.category.entity.CategoryStatus;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class CategoryUpdateDTO {
 
+    @Pattern(regexp = "^.*\\S.*$", message = "Category name must not be blank")
+    @Size(max = 100, message = "Category name must not exceed 100 characters.")
     private String categoryName;
     private String description;
     private CategoryStatus status;

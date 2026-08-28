@@ -55,14 +55,14 @@ public class CategoryService {
     public CategoryDTO updateCategory(Long id, CategoryUpdateDTO category){
         Optional<Category> updateCategory=repo.findById(id);
         if(updateCategory.isPresent()){
-            if (repo.existsByCategoryNameAndIdNot(category.getCategoryName(), id)) {
-                throw new CategoryAlreadyExistsException("Category already exists");
+            if(category.getCategoryName() != null) {
+                if (repo.existsByCategoryNameAndIdNot(category.getCategoryName(), id)) {
+                    throw new CategoryAlreadyExistsException("Category already exists");
+                }
             }
-            else {
                 Category categoryUpdation = cateMapper.updateCategory(updateCategory.get(), category);
                 repo.save(categoryUpdation);
                 return cateMapper.toDTO(categoryUpdation);
-            }
         }
         throw new CategoryNotFoundException("Category not found");
     }
