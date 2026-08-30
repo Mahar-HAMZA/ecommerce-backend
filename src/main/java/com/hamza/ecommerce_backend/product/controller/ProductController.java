@@ -2,6 +2,7 @@ package com.hamza.ecommerce_backend.product.controller;
 
 import com.hamza.ecommerce_backend.product.DTO.ProductCreateDTO;
 import com.hamza.ecommerce_backend.product.DTO.ProductDTO;
+import com.hamza.ecommerce_backend.product.DTO.ProductUpdateDTO;
 import com.hamza.ecommerce_backend.product.entity.Product;
 import com.hamza.ecommerce_backend.product.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@RequestBody Product product, @PathVariable Long id){
+    public ProductDTO updateProduct(@RequestBody ProductUpdateDTO product, @PathVariable Long id){
         return productService.updateProduct(product, id);
     }
 

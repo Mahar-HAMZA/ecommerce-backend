@@ -2,6 +2,7 @@ package com.hamza.ecommerce_backend.product.mapper;
 
 import com.hamza.ecommerce_backend.product.DTO.ProductCreateDTO;
 import com.hamza.ecommerce_backend.product.DTO.ProductDTO;
+import com.hamza.ecommerce_backend.product.DTO.ProductUpdateDTO;
 import com.hamza.ecommerce_backend.product.entity.Product;
 import org.springframework.stereotype.Component;
 
@@ -43,4 +44,24 @@ public class ProductMapper {
         }
         return dtos;
     }
+
+    public Product updateProduct(Product existingProduct, ProductUpdateDTO dto){
+        if(dto.getProductName() != null){
+            existingProduct.setProductName(dto.getProductName());
+        }
+        if(dto.getDescription() != null){
+            existingProduct.setDescription(dto.getDescription());
+        }
+        if(dto.getPrice() != null){
+            existingProduct.setPrice(dto.getPrice());
+        }
+        if(dto.getStatus() != null){
+            existingProduct.setStatus(dto.getStatus());
+        }
+        if(dto.getStockQuantity() != null){
+            existingProduct.setStockQuantity(dto.getStockQuantity());
+        }
+        return existingProduct;
+    }
+
 }
