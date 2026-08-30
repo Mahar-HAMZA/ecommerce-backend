@@ -1,12 +1,14 @@
 package com.hamza.ecommerce_backend.product.service;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
+import com.hamza.ecommerce_backend.product.DTO.ProductCreateDTO;
+import com.hamza.ecommerce_backend.product.DTO.ProductDTO;
 import com.hamza.ecommerce_backend.product.entity.Product;
+import com.hamza.ecommerce_backend.product.mapper.ProductMapper;
 import com.hamza.ecommerce_backend.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -17,18 +19,25 @@ public class ProductService {
     private ProductRepository productRepo;
     private CategoryRepository categoryRepo;
 
-    public ProductService(ProductRepository repo1, CategoryRepository repo2){
-        productRepo = repo1;
-        categoryRepo = repo2;
+    private ProductMapper mapper;
+
+    public ProductService(ProductRepository productRepo, CategoryRepository categoryRepo, ProductMapper mapper){
+        this.productRepo = productRepo;
+        this.categoryRepo = categoryRepo;
+        this.mapper=mapper;
     }
 
-    public Product createProduct(Product product){
-        boolean isTrue=productRepo.existsByProductName(product.getProductName());
-        Optional<Category> cate=categoryRepo.findById(product.getCategory().getId());
-        if(!isTrue){
+    public ProductDTO createProduct(ProductCreateDTO dto){
+        boolean productExists=productRepo.existsByProductName(dto.getProductName());
+        Optional<Category> cate=categoryRepo.findById(dto.getCategory_Id());
+        if(!productExists){
             if(cate.isPresent()){
+                Product product=mapper.toEntity(dto);
                 product.setCategory(cate.get());
-                return productRepo.save(product);
+                Product savedProduct=productRepo.save(product);
+                ProductDTO productDTO=mapper.toDTO(savedProduct);
+                return productDTO;
+//                return productRepo.save(product);
             }
             else{
                 throw new RuntimeException("Category does not exist");
@@ -39,14 +48,17 @@ public class ProductService {
         }
     }
 
-    public List<Product> getAllProducts(){
-        return productRepo.findAll();
+    public List<ProductDTO> getAllProducts(){
+        List<ProductDTO> dtos=mapper.allProductsToDTO(productRepo.findAll());
+        return dtos;
     }
 
-    public Product getProductById(Long id){
+    public ProductDTO getProductById(Long id){
         Optional<Product> product=productRepo.findById(id);
         if(product.isPresent()){
-            return product.get();
+            ProductDTO productDto=mapper.toDTO(product.get());
+            return productDto;
+       //     return product.get();
         }
         else{
             throw new RuntimeException("Product does not exist.");

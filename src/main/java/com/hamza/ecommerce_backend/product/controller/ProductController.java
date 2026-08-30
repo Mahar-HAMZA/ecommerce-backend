@@ -1,5 +1,7 @@
 package com.hamza.ecommerce_backend.product.controller;
 
+import com.hamza.ecommerce_backend.product.DTO.ProductCreateDTO;
+import com.hamza.ecommerce_backend.product.DTO.ProductDTO;
 import com.hamza.ecommerce_backend.product.entity.Product;
 import com.hamza.ecommerce_backend.product.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +19,17 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product){
-        return productService.createProduct(product);
+    public ProductDTO createProduct(@RequestBody ProductCreateDTO dto){
+        return productService.createProduct(dto);
     }
 
     @GetMapping
-    public List<Product> getAllProducts(){
+    public List<ProductDTO> getAllProducts(){
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id){
+    public ProductDTO getProductById(@PathVariable Long id){
         return productService.getProductById(id);
     }
 
