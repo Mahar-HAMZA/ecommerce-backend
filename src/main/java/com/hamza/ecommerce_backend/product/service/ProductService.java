@@ -1,10 +1,12 @@
 package com.hamza.ecommerce_backend.product.service;
 import com.hamza.ecommerce_backend.category.entity.Category;
+import com.hamza.ecommerce_backend.category.exception.CategoryNotFoundException;
 import com.hamza.ecommerce_backend.category.repository.CategoryRepository;
 import com.hamza.ecommerce_backend.product.DTO.ProductCreateDTO;
 import com.hamza.ecommerce_backend.product.DTO.ProductDTO;
 import com.hamza.ecommerce_backend.product.DTO.ProductUpdateDTO;
 import com.hamza.ecommerce_backend.product.entity.Product;
+import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsException;
 import com.hamza.ecommerce_backend.product.mapper.ProductMapper;
 import com.hamza.ecommerce_backend.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -29,8 +31,11 @@ public class ProductService {
     }
 
     public ProductDTO createProduct(ProductCreateDTO dto){
-        boolean productExists=productRepo.existsByProductName(dto.getProductName());
+        if(dto.getCategory_Id() == null){
+            throw new CategoryNotFoundException("Category is necessary to create Product");
+        }
         Optional<Category> cate=categoryRepo.findById(dto.getCategory_Id());
+        boolean productExists=productRepo.existsByProductName(dto.getProductName());
         if(!productExists){
             if(cate.isPresent()){
                 Product product=mapper.toEntity(dto);
@@ -41,11 +46,11 @@ public class ProductService {
 //                return productRepo.save(product);
             }
             else{
-                throw new RuntimeException("Category does not exist");
+                throw new CategoryNotFoundException("Category does not exist");
             }
         }
         else{
-            throw new RuntimeException("Product already exists");
+            throw new ProductAlreadyExistsException("Product already exists");
         }
     }
 

@@ -1,5 +1,9 @@
-package com.hamza.ecommerce_backend.category.exception;
+package com.hamza.ecommerce_backend.exception;
 
+import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsException;
+import com.hamza.ecommerce_backend.category.exception.CategoryDeletionNotAllowedException;
+import com.hamza.ecommerce_backend.category.exception.CategoryExceptionResponse;
+import com.hamza.ecommerce_backend.category.exception.CategoryNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -7,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler{
 
     @ExceptionHandler(CategoryAlreadyExistsException.class)
     public ResponseEntity<CategoryExceptionResponse> handle(CategoryAlreadyExistsException ex) {
