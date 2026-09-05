@@ -4,6 +4,8 @@ import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsExcep
 import com.hamza.ecommerce_backend.category.exception.CategoryDeletionNotAllowedException;
 import com.hamza.ecommerce_backend.category.exception.CategoryExceptionResponse;
 import com.hamza.ecommerce_backend.category.exception.CategoryNotFoundException;
+import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsException;
+import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,4 +45,22 @@ public class GlobalExceptionHandler{
         CategoryExceptionResponse response=new CategoryExceptionResponse(409, ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleProductNotFound(ProductNotFoundException ex){
+        CategoryExceptionResponse response =
+                new CategoryExceptionResponse(404, ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(ProductAlreadyExistsException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleProductAlreadyExists(ProductAlreadyExistsException ex){
+        CategoryExceptionResponse response =
+                new CategoryExceptionResponse(409, ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+
 }

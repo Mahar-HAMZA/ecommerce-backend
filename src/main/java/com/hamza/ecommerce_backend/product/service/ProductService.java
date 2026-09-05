@@ -7,6 +7,7 @@ import com.hamza.ecommerce_backend.product.DTO.ProductDTO;
 import com.hamza.ecommerce_backend.product.DTO.ProductUpdateDTO;
 import com.hamza.ecommerce_backend.product.entity.Product;
 import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsException;
+import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import com.hamza.ecommerce_backend.product.mapper.ProductMapper;
 import com.hamza.ecommerce_backend.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -67,31 +68,32 @@ public class ProductService {
        //     return product.get();
         }
         else{
-            throw new RuntimeException("Product does not exist.");
+            throw new ProductNotFoundException("Product does not exist.");
         }
     }
 
     public ProductDTO updateProduct(ProductUpdateDTO updateDTO, Long id) {
-        Optional<Product> product = productRepo.findById(id);
-        if (!product.isPresent()) {
-            throw new RuntimeException("Product does not exist");
+        Optional<Product> product=productRepo.findById(id);
+        if(!product.isPresent()){
+            throw new ProductNotFoundException("Product does not exist");
         }
-
-        Product existingProduct = product.get();
-        if (updateDTO.getProductName() != null && productRepo.existsByProductNameAndIdNot(updateDTO.getProductName(), id)) {
-            throw new RuntimeException("Product already exists");
-        }
-        Product updatedProduct = mapper.updateProduct(existingProduct, updateDTO);
-        if (updateDTO.getCategoryId() != null){
-            Optional<Category> category=categoryRepo.findById(updateDTO.getCategoryId());
-            if (!category.isPresent()){
-                throw new RuntimeException("Category does not exist");
+        if(updateDTO.getProductName() != null){
+            if(productRepo.existsByProductNameAndIdNot(updateDTO.getProductName(), id)){
+             throw new ProductAlreadyExistsException("Product already exists");
             }
-            updatedProduct.setCategory(category.get());
         }
-        Product savedProduct=productRepo.save(updatedProduct);
+        Product existingProduct=product.get();
+        if(updateDTO.getCategoryId() != null){
+            Optional<Category> cate=categoryRepo.findById(updateDTO.getCategoryId());
+            if(!cate.isPresent()){
+                throw new CategoryNotFoundException("Category does not exist");
+            }
+            existingProduct.setCategory(cate.get());
+        }
 
-        ProductDTO dto=mapper.toDTO(savedProduct);
+        Product updateProduct=mapper.updateProduct(existingProduct, updateDTO);
+        productRepo.save(updateProduct);
+        ProductDTO dto=mapper.toDTO(updateProduct);
         return dto;
     }
 
@@ -102,7 +104,7 @@ public class ProductService {
             return;
         }
         else{
-            throw new RuntimeException("Product does not exist.");
+            throw new ProductNotFoundException("Product does not exist.");
         }
     }
 }

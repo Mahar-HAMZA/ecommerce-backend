@@ -1,13 +1,21 @@
 package com.hamza.ecommerce_backend.product.DTO;
 
 import com.hamza.ecommerce_backend.product.entity.ProductStatus;
+import jakarta.validation.constraints.*;
 
 public class ProductUpdateDTO {
 
+    @Size(max = 100, message = "Product name must not exceed 100 characters.")
+    @Pattern(regexp = ".*[A-Za-z].*", message = "Product name must contain at least one letter.")
     private String productName;
     private String description;
+
+    @Positive(message = "Price must be greater than zero")
     private Double price;
+
+    @PositiveOrZero(message = "Stock quantity must not be negative.")
     private Integer stockQuantity;
+
     private ProductStatus status;
 
     private Long categoryId;
