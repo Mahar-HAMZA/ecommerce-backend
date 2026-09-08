@@ -4,6 +4,7 @@ import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsExcep
 import com.hamza.ecommerce_backend.category.exception.CategoryDeletionNotAllowedException;
 import com.hamza.ecommerce_backend.category.exception.CategoryExceptionResponse;
 import com.hamza.ecommerce_backend.category.exception.CategoryNotFoundException;
+import com.hamza.ecommerce_backend.order.exception.InsufficientStockException;
 import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsException;
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -62,5 +63,14 @@ public class GlobalExceptionHandler{
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleInsufficientStock(
+            InsufficientStockException ex) {
+
+        CategoryExceptionResponse response =
+                new CategoryExceptionResponse(409, ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
 
 }
