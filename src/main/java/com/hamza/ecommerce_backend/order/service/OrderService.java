@@ -65,4 +65,23 @@ public class OrderService {
         return mapper.toDTO(savedOrder);
     }
 
+    public OrderDTO getOrderById(Long id){
+        Optional<Order> order=OrderRepo.findById(id);
+        if(!order.isPresent()){
+            throw new ProductNotFoundException("Ordered does not exist");
+        }
+        Order existOrder=order.get();
+        OrderDTO dto=mapper.toDTO(existOrder);
+        return dto;
+    }
+
+    public List<OrderDTO> getAllOrders(){
+        List<OrderDTO> dto=new ArrayList<>();
+        List<Order> OrderList=OrderRepo.findAll();
+        for(Order order: OrderList){
+            dto.add(mapper.toDTO(order));
+        }
+        return dto;
+    }
+
 }

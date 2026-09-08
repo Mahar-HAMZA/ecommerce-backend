@@ -6,10 +6,9 @@ import com.hamza.ecommerce_backend.order.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -25,6 +24,16 @@ public class OrderController {
     public ResponseEntity<OrderDTO> makeOrder(@RequestBody @Valid OrderCreateDTO dto){
         OrderDTO response=orderService.makeOrder(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public OrderDTO getOrderById(@PathVariable Long id){
+        return orderService.getOrderById(id);
+    }
+
+    @GetMapping
+    public List<OrderDTO> getAllOrders(){
+        return orderService.getAllOrders();
     }
 
 }
