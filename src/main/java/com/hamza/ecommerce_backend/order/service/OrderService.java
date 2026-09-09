@@ -3,6 +3,7 @@ package com.hamza.ecommerce_backend.order.service;
 import com.hamza.ecommerce_backend.order.DTO.*;
 import com.hamza.ecommerce_backend.order.entity.*;
 import com.hamza.ecommerce_backend.order.exception.InsufficientStockException;
+import com.hamza.ecommerce_backend.order.exception.OrderNotFoundException;
 import com.hamza.ecommerce_backend.order.mapper.OrderMapper;
 import com.hamza.ecommerce_backend.order.repository.*;
 import com.hamza.ecommerce_backend.product.entity.Product;
@@ -68,7 +69,7 @@ public class OrderService {
     public OrderDTO getOrderById(Long id){
         Optional<Order> order=OrderRepo.findById(id);
         if(!order.isPresent()){
-            throw new ProductNotFoundException("Ordered does not exist");
+            throw new ProductNotFoundException("Order does not exist");
         }
         Order existOrder=order.get();
         OrderDTO dto=mapper.toDTO(existOrder);
@@ -82,6 +83,18 @@ public class OrderService {
             dto.add(mapper.toDTO(order));
         }
         return dto;
+    }
+
+    public OrderDTO updateOrderStatus(Long id, OrderStatusUpdateDTO dto){
+        Optional<Order> order=OrderRepo.findById(id);
+
+        if(!order.isPresent()){
+            throw new OrderNotFoundException("Order does not exist");
+        }
+        Order existOrder=order.get();
+        existOrder.setStatus(dto.getStatus());
+        Order updateOrder=OrderRepo.save(existOrder);
+        return mapper.toDTO(updateOrder);
     }
 
 }

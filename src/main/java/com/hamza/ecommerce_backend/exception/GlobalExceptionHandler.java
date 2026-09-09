@@ -10,6 +10,7 @@ import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsExcepti
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,6 +35,12 @@ public class GlobalExceptionHandler{
     public ResponseEntity<CategoryExceptionResponse> generalException(Exception ex){
         CategoryExceptionResponse response=new CategoryExceptionResponse(500, ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<CategoryExceptionResponse> HttpMessageHandler(HttpMessageNotReadableException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(400, "Invalid order status");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -2,6 +2,7 @@ package com.hamza.ecommerce_backend.order.controller;
 
 import com.hamza.ecommerce_backend.order.DTO.OrderCreateDTO;
 import com.hamza.ecommerce_backend.order.DTO.OrderDTO;
+import com.hamza.ecommerce_backend.order.DTO.OrderStatusUpdateDTO;
 import com.hamza.ecommerce_backend.order.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,11 @@ public class OrderController {
     @GetMapping
     public List<OrderDTO> getAllOrders(){
         return orderService.getAllOrders();
+    }
+
+    @PutMapping("/{id}")
+    public OrderDTO updateOrderStatus(@PathVariable Long id, @RequestBody @Valid OrderStatusUpdateDTO dto){
+        return orderService.updateOrderStatus(id, dto);
     }
 
 }
