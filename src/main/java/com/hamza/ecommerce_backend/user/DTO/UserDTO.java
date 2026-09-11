@@ -1,20 +1,25 @@
 package com.hamza.ecommerce_backend.user.DTO;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
-public class UserCreateDTO {
+public class UserDTO {
 
-    @NotBlank
-    private String firstName;
+    private Long id;
 
-    private String middleName;
-    @NotBlank
-    private String lastName;
-    @NotBlank @Email
+    private  String firstName;
+    private  String middleName;
+    private  String lastName;
     private String email;
-    @NotBlank
-    private String password;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -48,11 +53,19 @@ public class UserCreateDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

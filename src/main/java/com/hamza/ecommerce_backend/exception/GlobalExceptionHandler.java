@@ -8,6 +8,7 @@ import com.hamza.ecommerce_backend.order.exception.InsufficientStockException;
 import com.hamza.ecommerce_backend.order.exception.OrderNotFoundException;
 import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsException;
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
+import com.hamza.ecommerce_backend.user.exception.EmailAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -87,6 +88,12 @@ public class GlobalExceptionHandler{
                 new CategoryExceptionResponse(404, ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<CategoryExceptionResponse> dublicateEmailHandler(EmailAlreadyExistsException ex){
+        CategoryExceptionResponse response=new  CategoryExceptionResponse(409, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
 }
