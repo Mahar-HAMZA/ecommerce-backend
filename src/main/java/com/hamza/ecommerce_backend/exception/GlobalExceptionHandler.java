@@ -12,6 +12,7 @@ import com.hamza.ecommerce_backend.user.exception.EmailAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -94,6 +95,12 @@ public class GlobalExceptionHandler{
     public ResponseEntity<CategoryExceptionResponse> dublicateEmailHandler(EmailAlreadyExistsException ex){
         CategoryExceptionResponse response=new  CategoryExceptionResponse(409, ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleBadCredentialsException(BadCredentialsException ex) {
+        CategoryExceptionResponse response=new  CategoryExceptionResponse(401, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
 }

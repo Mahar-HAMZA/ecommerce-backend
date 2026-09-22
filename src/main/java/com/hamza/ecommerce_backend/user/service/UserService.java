@@ -1,5 +1,7 @@
 package com.hamza.ecommerce_backend.user.service;
 
+import com.hamza.ecommerce_backend.user.DTO.LoginDTO;
+import com.hamza.ecommerce_backend.user.DTO.LoginResponseDTO;
 import com.hamza.ecommerce_backend.user.DTO.UserCreateDTO;
 import com.hamza.ecommerce_backend.user.DTO.UserDTO;
 import com.hamza.ecommerce_backend.user.config.SecurityConfig;
@@ -7,6 +9,9 @@ import com.hamza.ecommerce_backend.user.entity.User;
 import com.hamza.ecommerce_backend.user.exception.EmailAlreadyExistsException;
 import com.hamza.ecommerce_backend.user.mapper.UserMapper;
 import com.hamza.ecommerce_backend.user.repository.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +23,13 @@ public class UserService {
     private final UserRepository UserRepo;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticateManager;
 
-    public UserService(UserRepository UserRepo, UserMapper mapper, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository UserRepo, UserMapper mapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticateManager){
         this.UserRepo = UserRepo;
         this.mapper = mapper;
         this.passwordEncoder=passwordEncoder;
+        this.authenticateManager=authenticateManager;
     }
 
     public UserDTO registerUser(UserCreateDTO dto) {
@@ -35,6 +42,15 @@ public class UserService {
         User savedUser=UserRepo.save(user);
         UserDTO responseDTO=mapper.toDTO(savedUser);
         return responseDTO;
+    }
+
+    public LoginResponseDTO loginUser(LoginDTO dto){
+        UsernamePasswordAuthenticationToken checker=new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
+
+        Authentication authentication=authenticateManager.authenticate(checker);
+        LoginResponseDTO loginResponseDTO=new LoginResponseDTO();
+        loginResponseDTO.setMessage("login Successful");
+        return loginResponseDTO;
     }
 
 }

@@ -23,16 +23,16 @@ public class CartService {
         this.ProductRepo = ProductRepo;
     }
 
-    public Cart addToCart(AddCartDTO dto){
-        Optional<Product> product=ProductRepo.findById(dto.getProductId());
-
-        if(!product.isPresent()){
-            throw new ProductNotFoundException("Product does not exist");
-        }
-        Product existProduct=product.get();
-        if(dto.getQuantity() < existProduct.getStockQuantity()){
-            if(CartRepo.)
-        }
-    }
+//    public Cart addToCart(AddCartDTO dto){
+//        Optional<Product> product=ProductRepo.findById(dto.getProductId());
+//
+//        if(!product.isPresent()){
+//            throw new ProductNotFoundException("Product does not exist");
+//        }
+//        Product existProduct=product.get();
+//        if(dto.getQuantity() < existProduct.getStockQuantity()){
+//            if(CartRepo.)
+//        }
+//    }
 
 }
