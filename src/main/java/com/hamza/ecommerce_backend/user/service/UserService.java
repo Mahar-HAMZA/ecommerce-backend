@@ -9,6 +9,7 @@ import com.hamza.ecommerce_backend.user.entity.User;
 import com.hamza.ecommerce_backend.user.exception.EmailAlreadyExistsException;
 import com.hamza.ecommerce_backend.user.mapper.UserMapper;
 import com.hamza.ecommerce_backend.user.repository.UserRepository;
+import com.hamza.ecommerce_backend.user.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,12 +25,14 @@ public class UserService {
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticateManager;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository UserRepo, UserMapper mapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticateManager){
+    public UserService(UserRepository UserRepo, UserMapper mapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticateManager, JwtService jwtService){
         this.UserRepo = UserRepo;
         this.mapper = mapper;
         this.passwordEncoder=passwordEncoder;
         this.authenticateManager=authenticateManager;
+        this.jwtService=jwtService;
     }
 
     public UserDTO registerUser(UserCreateDTO dto) {
@@ -49,6 +52,7 @@ public class UserService {
 
         Authentication authentication=authenticateManager.authenticate(checker);
         LoginResponseDTO loginResponseDTO=new LoginResponseDTO();
+        loginResponseDTO.setToken(jwtService.generateToken(dto.getEmail()));
         loginResponseDTO.setMessage("login Successful");
         return loginResponseDTO;
     }
