@@ -1,5 +1,6 @@
 package com.hamza.ecommerce_backend.user.security;
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.hamza.ecommerce_backend.user.service.CustomUserDetailsService;
@@ -27,11 +28,18 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String headerToken=authHeader.substring(7);
-            String email=jwtService.extractEmail(headerToken);
-            UserDetails userDetails=userDetailsService.loadUserByUsername(email);
-            UsernamePasswordAuthenticationToken userAuthentication=new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(userAuthentication);
+            try{
+                String headerToken=authHeader.substring(7);
+                String email=jwtService.extractEmail(headerToken);
+                UserDetails userDetails=userDetailsService.loadUserByUsername(email);
+                UsernamePasswordAuthenticationToken userAuthentication=new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(userAuthentication);
+            }
+            catch(JwtException ex){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
         }
         filterChain.doFilter(request, response);
     }
