@@ -1,5 +1,7 @@
 package com.hamza.ecommerce_backend.user.DTO;
 
+import com.hamza.ecommerce_backend.user.entity.Role;
+
 import java.time.LocalDateTime;
 
 public class UserDTO {
@@ -10,6 +12,7 @@ public class UserDTO {
     private  String middleName;
     private  String lastName;
     private String email;
+    private Role role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -51,6 +54,14 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public LocalDateTime getCreatedAt() {

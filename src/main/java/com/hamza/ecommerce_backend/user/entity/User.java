@@ -20,6 +20,9 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -72,6 +75,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public LocalDateTime getCreatedAt() {

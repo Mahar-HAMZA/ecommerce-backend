@@ -1,10 +1,8 @@
 package com.hamza.ecommerce_backend.user.service;
 
-import com.hamza.ecommerce_backend.user.DTO.LoginDTO;
-import com.hamza.ecommerce_backend.user.DTO.LoginResponseDTO;
-import com.hamza.ecommerce_backend.user.DTO.UserCreateDTO;
-import com.hamza.ecommerce_backend.user.DTO.UserDTO;
+import com.hamza.ecommerce_backend.user.DTO.*;
 import com.hamza.ecommerce_backend.user.config.SecurityConfig;
+import com.hamza.ecommerce_backend.user.entity.Role;
 import com.hamza.ecommerce_backend.user.entity.User;
 import com.hamza.ecommerce_backend.user.exception.EmailAlreadyExistsException;
 import com.hamza.ecommerce_backend.user.mapper.UserMapper;
@@ -41,6 +39,7 @@ public class UserService {
             throw new EmailAlreadyExistsException("Email already exists");
         }
         User user=mapper.toEntity(dto);
+        user.setRole(Role.CUSTOMER);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         User savedUser=UserRepo.save(user);
         UserDTO responseDTO=mapper.toDTO(savedUser);
