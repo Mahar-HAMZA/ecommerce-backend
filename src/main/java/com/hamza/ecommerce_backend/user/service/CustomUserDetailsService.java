@@ -25,6 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             return org.springframework.security.core.userdetails.User
                     .withUsername(existUser.getEmail())
                     .password(existUser.getPassword())
+                    .roles(existUser.getRole().name())
                     .build();
         }
         throw new UsernameNotFoundException("User does not exist");

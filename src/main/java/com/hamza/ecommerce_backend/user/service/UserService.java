@@ -11,6 +11,7 @@ import com.hamza.ecommerce_backend.user.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +51,10 @@ public class UserService {
         UsernamePasswordAuthenticationToken checker=new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
 
         Authentication authentication=authenticateManager.authenticate(checker);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String role = userDetails.getAuthorities().iterator().next().getAuthority();
         LoginResponseDTO loginResponseDTO=new LoginResponseDTO();
-        loginResponseDTO.setToken(jwtService.generateToken(dto.getEmail()));
+        loginResponseDTO.setToken(jwtService.generateToken(dto.getEmail(), role));
         loginResponseDTO.setMessage("login Successful");
         return loginResponseDTO;
     }

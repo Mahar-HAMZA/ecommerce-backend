@@ -29,9 +29,9 @@ public class JwtService {
 
     }
 
-    public String generateToken(String email){
+    public String generateToken(String email, String role){
         Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
-        return Jwts.builder().subject(email).expiration(expirationDate).signWith(secretKey).compact();
+        return Jwts.builder().subject(email).claim("role", role).expiration(expirationDate).signWith(secretKey).compact();
     }
 
     public String extractEmail(String token){
