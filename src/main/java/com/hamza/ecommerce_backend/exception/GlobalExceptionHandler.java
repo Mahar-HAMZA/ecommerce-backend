@@ -5,6 +5,7 @@ import com.hamza.ecommerce_backend.category.exception.CategoryDeletionNotAllowed
 import com.hamza.ecommerce_backend.category.exception.CategoryExceptionResponse;
 import com.hamza.ecommerce_backend.category.exception.CategoryNotFoundException;
 import com.hamza.ecommerce_backend.order.exception.InsufficientStockException;
+import com.hamza.ecommerce_backend.order.exception.OrderAccessDeniedException;
 import com.hamza.ecommerce_backend.order.exception.OrderNotFoundException;
 import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsException;
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
@@ -101,6 +102,12 @@ public class GlobalExceptionHandler{
     public ResponseEntity<CategoryExceptionResponse> handleBadCredentialsException(BadCredentialsException ex) {
         CategoryExceptionResponse response=new  CategoryExceptionResponse(401, ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(OrderAccessDeniedException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleOrderAccessDenied(OrderAccessDeniedException ex){
+        CategoryExceptionResponse response = new CategoryExceptionResponse(403, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
 }

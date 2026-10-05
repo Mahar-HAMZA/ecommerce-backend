@@ -1,5 +1,6 @@
 package com.hamza.ecommerce_backend.order.entity;
 
+import com.hamza.ecommerce_backend.user.entity.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -26,6 +27,10 @@ public class Order {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Long getId() {
         return id;
@@ -73,5 +78,13 @@ public class Order {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
