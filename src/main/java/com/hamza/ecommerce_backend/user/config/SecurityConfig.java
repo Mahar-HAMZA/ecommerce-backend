@@ -1,6 +1,7 @@
 package com.hamza.ecommerce_backend.user.config;
 
 import com.hamza.ecommerce_backend.user.security.JwtFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -42,6 +43,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/orders/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        })
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

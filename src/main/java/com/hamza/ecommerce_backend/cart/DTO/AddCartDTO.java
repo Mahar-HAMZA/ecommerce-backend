@@ -1,30 +1,21 @@
 package com.hamza.ecommerce_backend.cart.DTO;
 
-import com.hamza.ecommerce_backend.product.entity.Product;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+
+import java.util.List;
 
 public class AddCartDTO {
 
-    @NotNull
-    private Long productId;
+    @NotEmpty
+    @Valid
+    private List<AddCartItemDTO> items;
 
-    @NotNull @Min(1)
-    private Integer quantity;
-
-    public Long getProductId() {
-        return productId;
+    public List<AddCartItemDTO> getItems() {
+        return items;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setItems(List<AddCartItemDTO> items) {
+        this.items = items;
     }
 }
