@@ -1,5 +1,8 @@
 package com.hamza.ecommerce_backend.exception;
 
+import com.hamza.ecommerce_backend.cart.exception.CartItemNotFoundException;
+import com.hamza.ecommerce_backend.cart.exception.CartNotFoundException;
+import com.hamza.ecommerce_backend.cart.exception.UnauthorizedCartAccessException;
 import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsException;
 import com.hamza.ecommerce_backend.category.exception.CategoryDeletionNotAllowedException;
 import com.hamza.ecommerce_backend.category.exception.CategoryExceptionResponse;
@@ -10,6 +13,7 @@ import com.hamza.ecommerce_backend.order.exception.OrderNotFoundException;
 import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsException;
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import com.hamza.ecommerce_backend.user.exception.EmailAlreadyExistsException;
+import com.hamza.ecommerce_backend.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -109,5 +113,31 @@ public class GlobalExceptionHandler{
         CategoryExceptionResponse response = new CategoryExceptionResponse(403, ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
+
+    @ExceptionHandler(CartNotFoundException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleCartNotFound(CartNotFoundException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(404, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(CartItemNotFoundException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleCartItemNotFound(CartItemNotFoundException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(404, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(UnauthorizedCartAccessException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleUnauthorizedCartAccecss(UnauthorizedCartAccessException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(403, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    public ResponseEntity<CategoryExceptionResponse> handleUserNotFound(UserNotFoundException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(404, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+
+
 
 }
