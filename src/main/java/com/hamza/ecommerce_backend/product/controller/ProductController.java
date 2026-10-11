@@ -6,6 +6,7 @@ import com.hamza.ecommerce_backend.product.DTO.ProductUpdateDTO;
 import com.hamza.ecommerce_backend.product.entity.Product;
 import com.hamza.ecommerce_backend.product.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDTO> getAllProducts(){
-        return productService.getAllProducts();
+    public Page<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize){
+        return productService.getAllProducts(pageNumber, pageSize);
     }
 
     @GetMapping("/{id}")

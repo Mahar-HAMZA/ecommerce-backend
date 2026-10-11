@@ -4,6 +4,7 @@ import com.hamza.ecommerce_backend.product.DTO.ProductCreateDTO;
 import com.hamza.ecommerce_backend.product.DTO.ProductDTO;
 import com.hamza.ecommerce_backend.product.DTO.ProductUpdateDTO;
 import com.hamza.ecommerce_backend.product.entity.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -38,12 +39,8 @@ public class ProductMapper {
         return dto;
     }
 
-    public List<ProductDTO> allProductsToDTO(List<Product> products){
-        List<ProductDTO> dtos=new ArrayList<>();
-        for(Product product:products){
-            dtos.add(toDTO(product));
-        }
-        return dtos;
+    public Page<ProductDTO> allProductsToDTO(Page<Product> products) {
+        return products.map(this::toDTO);
     }
 
     public Product updateProduct(Product existingProduct, ProductUpdateDTO dto){

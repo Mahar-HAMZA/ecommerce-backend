@@ -10,6 +10,8 @@ import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsExcepti
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import com.hamza.ecommerce_backend.product.mapper.ProductMapper;
 import com.hamza.ecommerce_backend.product.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -55,9 +57,16 @@ public class ProductService {
         }
     }
 
-    public List<ProductDTO> getAllProducts(){
-        List<ProductDTO> dtos=mapper.allProductsToDTO(productRepo.findAll());
-        return dtos;
+    public Page<ProductDTO> getAllProducts(int pageNumber, int pageSize) {
+        if (pageNumber < 0) {
+            throw new IllegalArgumentException("Page number cannot be negative");
+        }
+
+        if (pageSize < 1 || pageSize > 100) {
+            throw new IllegalArgumentException("Page size must be between 1 and 100");
+        }
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+        return mapper.allProductsToDTO(productRepo.findAll(pageable));
     }
 
     public ProductDTO getProductById(Long id){

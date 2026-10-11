@@ -79,12 +79,8 @@ public class GlobalExceptionHandler{
     }
 
     @ExceptionHandler(InsufficientStockException.class)
-    public ResponseEntity<CategoryExceptionResponse> handleInsufficientStock(
-            InsufficientStockException ex) {
-
-        CategoryExceptionResponse response =
-                new CategoryExceptionResponse(409, ex.getMessage());
-
+    public ResponseEntity<CategoryExceptionResponse> handleInsufficientStock(InsufficientStockException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(409, ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
@@ -137,7 +133,11 @@ public class GlobalExceptionHandler{
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleIllegalArgument(IllegalArgumentException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(400, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 
 
 }
