@@ -27,8 +27,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize){
-        return productService.getAllProducts(pageNumber, pageSize);
+    public Page<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "price") String sortBy, @RequestParam(defaultValue = "DESC") String direction){
+        return productService.getAllProducts(pageNumber, pageSize, sortBy, direction);
     }
 
     @GetMapping("/{id}")
