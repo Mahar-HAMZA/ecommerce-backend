@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -27,8 +28,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "price") String sortBy, @RequestParam(defaultValue = "DESC") String direction){
-        return productService.getAllProducts(pageNumber, pageSize, sortBy, direction);
+    public Page<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize,
+                                           @RequestParam(defaultValue = "price") String sortBy, @RequestParam(defaultValue = "DESC") String direction,
+                                           @RequestParam(required = false) BigDecimal minPrice, @RequestParam(required = false) BigDecimal maxPrice){
+        return productService.getAllProducts(pageNumber, pageSize, sortBy, direction, minPrice, maxPrice);
     }
 
     @GetMapping("/{id}")

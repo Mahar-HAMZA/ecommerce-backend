@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,22 +68,36 @@ public class ProductService {
         }
     }
 
-    public Page<ProductDTO> getAllProducts(int pageNumber, int pageSize, String sortBy, String direction) {
-        direction=direction.toUpperCase();
-        if (pageNumber < 0) {
-            throw new IllegalArgumentException("Page number cannot be negative");
+    public Page<ProductDTO> getAllProducts(int pageNumber, int pageSize, String sortBy, String direction, BigDecimal minPrice, BigDecimal maxPrice) {
+        if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
+            throw new IllegalArgumentException("Enter valid price range");
         }
-        if (pageSize < 1 || pageSize > 100) {
-            throw new IllegalArgumentException("Page size must be between 1 and 100");
-        }
-        if(!direction.equals("ASC") && !direction.equals("DESC")){
-            throw new IllegalArgumentException("Direction Not Allowed: "+direction);
-        }
-        if(!ALLOWED_SORT_FIELDS.contains(sortBy)){
-            throw new IllegalArgumentException("Argument Not Allowed: "+sortBy);
-        }
-        PageRequest pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.valueOf(direction), sortBy));
-        return mapper.allProductsToDTO(productRepo.findAll(pageable));
+        direction = direction.toUpperCase();
+            if (pageNumber < 0) {
+                throw new IllegalArgumentException("Page number cannot be negative");
+            }
+            if (pageSize < 1 || pageSize > 100) {
+                throw new IllegalArgumentException("Page size must be between 1 and 100");
+            }
+            if (!direction.equals("ASC") && !direction.equals("DESC")) {
+                throw new IllegalArgumentException("Direction Not Allowed: " + direction);
+            }
+            if (!ALLOWED_SORT_FIELDS.contains(sortBy)) {
+                throw new IllegalArgumentException("Argument Not Allowed: " + sortBy);
+            }
+            PageRequest pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.valueOf(direction), sortBy));
+            if(minPrice == null && maxPrice == null){
+                return mapper.allProductsToDTO(productRepo.findAll(pageable));
+            }
+            else if(minPrice != null && maxPrice != null){
+                return mapper.allProductsToDTO(productRepo.findByPriceBetween(minPrice, maxPrice, pageable));
+            }
+            else if(minPrice == null){
+                return mapper.allProductsToDTO(productRepo.findByPriceLessThanEqual(maxPrice, pageable));
+            }
+            else{
+                return mapper.allProductsToDTO(productRepo.findByPriceGreaterThanEqual(minPrice, pageable));
+            }
     }
 
     public ProductDTO getProductById(Long id){
