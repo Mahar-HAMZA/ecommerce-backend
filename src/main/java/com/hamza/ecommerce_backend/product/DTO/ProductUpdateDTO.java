@@ -3,6 +3,8 @@ package com.hamza.ecommerce_backend.product.DTO;
 import com.hamza.ecommerce_backend.product.entity.ProductStatus;
 import jakarta.validation.constraints.*;
 
+import java.math.BigDecimal;
+
 public class ProductUpdateDTO {
 
     @Size(max = 100, message = "Product name must not exceed 100 characters.")
@@ -11,7 +13,7 @@ public class ProductUpdateDTO {
     private String description;
 
     @Positive(message = "Price must be greater than zero")
-    private Double price;
+    private BigDecimal price;
 
     @PositiveOrZero(message = "Stock quantity must not be negative.")
     private Integer stockQuantity;
@@ -36,11 +38,11 @@ public class ProductUpdateDTO {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

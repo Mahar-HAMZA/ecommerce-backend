@@ -3,6 +3,8 @@ package com.hamza.ecommerce_backend.product.DTO;
 import com.hamza.ecommerce_backend.product.entity.ProductStatus;
 import jakarta.validation.constraints.*;
 
+import java.math.BigDecimal;
+
 public class ProductCreateDTO {
 
     @NotBlank(message = "Product name must not be blank")
@@ -13,8 +15,9 @@ public class ProductCreateDTO {
 
     @NotNull(message = "Price is required")
     @Positive(message = "Price must be greater than zero")
-    private Double price;
+    private BigDecimal price;
 
+    @NotNull(message = "Stock quantity is required")
     @PositiveOrZero(message = "Stock quantity must not be negative.")
     private Integer stockQuantity;
 
@@ -40,19 +43,19 @@ public class ProductCreateDTO {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public int getStockQuantity() {
+    public Integer getStockQuantity() {
         return stockQuantity;
     }
 
-    public void setStockQuantity(int stockQuantity) {
+    public void setStockQuantity(Integer stockQuantity) {
         this.stockQuantity = stockQuantity;
     }
 

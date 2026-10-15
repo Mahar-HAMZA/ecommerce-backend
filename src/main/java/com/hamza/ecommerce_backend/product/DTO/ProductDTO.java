@@ -1,14 +1,8 @@
 package com.hamza.ecommerce_backend.product.DTO;
 
-import com.hamza.ecommerce_backend.category.entity.Category;
 import com.hamza.ecommerce_backend.product.entity.ProductStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class ProductDTO {
@@ -16,7 +10,7 @@ public class ProductDTO {
     private Long id;
     private String productName;
     private String description;
-    private double price;
+    private BigDecimal price;
     private int stockQuantity;
 
     private ProductStatus status;
@@ -51,11 +45,11 @@ public class ProductDTO {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

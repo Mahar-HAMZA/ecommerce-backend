@@ -7,17 +7,13 @@ import com.hamza.ecommerce_backend.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
 public class ProductMapper {
 
     public Product toEntity(ProductCreateDTO dto){
         Product product = new Product();
         product.setProductName(dto.getProductName());
-        product.setPrice(BigDecimal.valueOf(dto.getPrice()));
+        product.setPrice(dto.getPrice());
         product.setStockQuantity(dto.getStockQuantity());
         product.setDescription(dto.getDescription());
         product.setStatus(dto.getStatus());
@@ -28,7 +24,7 @@ public class ProductMapper {
 
         ProductDTO dto=new ProductDTO();
         dto.setProductName(product.getProductName());
-        dto.setPrice(product.getPrice().doubleValue());
+        dto.setPrice(product.getPrice());
         dto.setStockQuantity(product.getStockQuantity());
         dto.setDescription(product.getDescription());
         dto.setStatus(product.getStatus());
@@ -51,7 +47,7 @@ public class ProductMapper {
             existingProduct.setDescription(dto.getDescription());
         }
         if(dto.getPrice() != null){
-            existingProduct.setPrice(BigDecimal.valueOf(dto.getPrice()));
+            existingProduct.setPrice(dto.getPrice());
         }
         if(dto.getStatus() != null){
             existingProduct.setStatus(dto.getStatus());
