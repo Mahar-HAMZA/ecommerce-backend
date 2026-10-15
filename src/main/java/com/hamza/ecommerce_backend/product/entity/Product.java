@@ -1,6 +1,9 @@
 package com.hamza.ecommerce_backend.product.entity;
 import com.hamza.ecommerce_backend.category.entity.Category;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -18,7 +21,14 @@ public class Product {
     @Column(unique = true, nullable = false, length=100)
     private String productName;
     private String description;
+    @NotNull(message = "Product price is required")
+    @DecimalMin(value = "0.00", inclusive = false,
+            message = "Product price must be greater than zero")
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+
+    @Min(value = 0, message = "Stock quantity cannot be negative")
+    @Column(nullable = false)
     private int stockQuantity;
 
     @Enumerated(EnumType.STRING)
