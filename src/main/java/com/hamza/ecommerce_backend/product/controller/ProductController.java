@@ -31,8 +31,9 @@ public class ProductController {
     public Page<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize,
                                            @RequestParam(defaultValue = "price") String sortBy, @RequestParam(defaultValue = "DESC") String direction,
                                            @RequestParam(required = false) String search,
-                                           @RequestParam(required = false) BigDecimal minPrice, @RequestParam(required = false) BigDecimal maxPrice){
-        return productService.getAllProducts(pageNumber, pageSize, sortBy, direction, search, minPrice, maxPrice);
+                                           @RequestParam(required = false) BigDecimal minPrice,
+                                           @RequestParam(required = false) BigDecimal maxPrice, @RequestParam(required = false) Long categoryId){
+        return productService.getAllProducts(pageNumber, pageSize, sortBy, direction, search, minPrice, maxPrice, categoryId);
     }
 
     @GetMapping("/{id}")

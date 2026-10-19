@@ -19,12 +19,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     public Page<Product> findByPriceGreaterThanEqual(BigDecimal minPrice, Pageable pageable);
     public Page<Product> findByPriceLessThanEqual(BigDecimal maxPrice, Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE (:search IS NULL OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :search, '%')))" +
-            " AND (:minPrice is NULL OR p.price >= :minPrice) " +
-            "AND (:maxPrice is NULL OR p.price <= :maxPrice)")
+    @Query("SELECT p FROM Product p WHERE " +
+            "(:search IS NULL OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
+            "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +
+            "AND (:categoryId IS NULL OR p.category.id = :categoryId)")
     public Page<Product> searchByProductName(@Param("search") String search,
                                              @Param("minPrice") BigDecimal minPrice,
-                                             @Param("maxPrice") BigDecimal maxPrice ,Pageable pageable);
+                                             @Param("maxPrice") BigDecimal maxPrice, @Param("categoryId") Long categoryId, Pageable pageable);
 
 
 }

@@ -68,7 +68,7 @@ public class ProductService {
         }
     }
 
-    public Page<ProductDTO> getAllProducts(int pageNumber, int pageSize, String sortBy, String direction, String search, BigDecimal minPrice, BigDecimal maxPrice) {
+    public Page<ProductDTO> getAllProducts(int pageNumber, int pageSize, String sortBy, String direction, String search, BigDecimal minPrice, BigDecimal maxPrice, Long categoryId) {
         if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
             throw new IllegalArgumentException("Enter valid price range");
         }
@@ -85,8 +85,13 @@ public class ProductService {
             if (!ALLOWED_SORT_FIELDS.contains(sortBy)) {
                 throw new IllegalArgumentException("Argument Not Allowed: " + sortBy);
             }
+            if(categoryId != null) {
+                if (!productRepo.existsBycategory_Id(categoryId)) {
+                    throw new CategoryNotFoundException("Category does not exist");
+                }
+            }
             PageRequest pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.valueOf(direction), sortBy));
-        return mapper.allProductsToDTO(productRepo.searchByProductName(search, minPrice, maxPrice, pageable));
+        return mapper.allProductsToDTO(productRepo.searchByProductName(search, minPrice, maxPrice, categoryId, pageable));
     }
 
     public ProductDTO getProductById(Long id){
