@@ -22,11 +22,11 @@ public class ProductController {
         this.productService=productService;
     }
 
+
     @PostMapping
     public ProductDTO createProduct(@RequestBody @Valid ProductCreateDTO dto){
         return productService.createProduct(dto);
     }
-
     @GetMapping
     public Page<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize,
                                            @RequestParam(defaultValue = "price") String sortBy, @RequestParam(defaultValue = "DESC") String direction,

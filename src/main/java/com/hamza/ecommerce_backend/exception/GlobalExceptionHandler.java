@@ -21,6 +21,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler{
@@ -38,21 +41,35 @@ public class GlobalExceptionHandler{
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String message = "Invalid value for parameter: " + ex.getName();
+
+        CategoryExceptionResponse response=new CategoryExceptionResponse(400, message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CategoryExceptionResponse> generalException(Exception ex){
-        CategoryExceptionResponse response=new CategoryExceptionResponse(500, ex.getMessage());
+        CategoryExceptionResponse response=new CategoryExceptionResponse(500, "An unexpected server error occurred.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<CategoryExceptionResponse> HttpMessageHandler(HttpMessageNotReadableException ex){
-        CategoryExceptionResponse response=new CategoryExceptionResponse(400, "Invalid order status");
+        CategoryExceptionResponse response=new CategoryExceptionResponse(400, "Invalid request body. Please check your JSON and field values.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<CategoryExceptionResponse> handleValidationException(MethodArgumentNotValidException ex){
-        CategoryExceptionResponse response=new CategoryExceptionResponse(400, ex.getBindingResult().getFieldError().getDefaultMessage());
+    public ResponseEntity<CategoryExceptionResponse> handleValidationException(MethodArgumentNotValidException ex) {
+        String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getDefaultMessage()).collect(Collectors.joining(", "));
+        if (errorMessage.isBlank()) {
+            errorMessage = "Invalid input. Please check your request.";
+        }
+        CategoryExceptionResponse response=new CategoryExceptionResponse(400, errorMessage);
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
@@ -128,6 +145,7 @@ public class GlobalExceptionHandler{
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<CategoryExceptionResponse> handleUserNotFound(UserNotFoundException ex){
         CategoryExceptionResponse response=new CategoryExceptionResponse(404, ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);

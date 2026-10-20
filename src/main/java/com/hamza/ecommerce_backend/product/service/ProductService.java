@@ -86,7 +86,7 @@ public class ProductService {
                 throw new IllegalArgumentException("Argument Not Allowed: " + sortBy);
             }
             if(categoryId != null) {
-                if (!productRepo.existsBycategory_Id(categoryId)) {
+                if (!categoryRepo.existsById(categoryId)) {
                     throw new CategoryNotFoundException("Category does not exist");
                 }
             }
