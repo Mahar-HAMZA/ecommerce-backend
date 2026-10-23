@@ -7,6 +7,7 @@ import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsExcep
 import com.hamza.ecommerce_backend.category.exception.CategoryDeletionNotAllowedException;
 import com.hamza.ecommerce_backend.category.exception.CategoryExceptionResponse;
 import com.hamza.ecommerce_backend.category.exception.CategoryNotFoundException;
+import com.hamza.ecommerce_backend.order.exception.DuplicateProductException;
 import com.hamza.ecommerce_backend.order.exception.InsufficientStockException;
 import com.hamza.ecommerce_backend.order.exception.OrderAccessDeniedException;
 import com.hamza.ecommerce_backend.order.exception.OrderNotFoundException;
@@ -15,6 +16,7 @@ import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import com.hamza.ecommerce_backend.user.exception.EmailAlreadyExistsException;
 import com.hamza.ecommerce_backend.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -112,6 +114,12 @@ public class GlobalExceptionHandler{
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<CategoryExceptionResponse> dublicateEmailHandler(EmailAlreadyExistsException ex){
         CategoryExceptionResponse response=new  CategoryExceptionResponse(409, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(DuplicateProductException.class)
+    public ResponseEntity<CategoryExceptionResponse> dublicateProductException(DuplicateProductException ex){
+        CategoryExceptionResponse response=new CategoryExceptionResponse(409, ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 

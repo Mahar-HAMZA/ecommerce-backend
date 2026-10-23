@@ -2,6 +2,7 @@ package com.hamza.ecommerce_backend.order.service;
 
 import com.hamza.ecommerce_backend.order.DTO.*;
 import com.hamza.ecommerce_backend.order.entity.*;
+import com.hamza.ecommerce_backend.order.exception.DuplicateProductException;
 import com.hamza.ecommerce_backend.order.exception.InsufficientStockException;
 import com.hamza.ecommerce_backend.order.exception.OrderAccessDeniedException;
 import com.hamza.ecommerce_backend.order.exception.OrderNotFoundException;
@@ -18,9 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -43,15 +42,19 @@ public class OrderService {
     @Transactional
     public OrderDTO makeOrder(OrderCreateDTO dto){
         List<OrderItem> orderItems=new ArrayList<>();
+        Set<Long> productIds=new HashSet<>();
         Order order=mapper.toEntity(dto);
         BigDecimal totalAmount=BigDecimal.ZERO;
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         for(OrderItemCreateDTO items : dto.getItems()){
             Optional<Product> product=productRepo.findById(items.getProductId());
-            if(product.isPresent()){
-                Product product1=product.get();
-                if(product1.getStockQuantity() >= items.getQuantity()){
-                    OrderItem item=new OrderItem();
+            if(product.isPresent()) {
+                Product product1 = product.get();
+                if (!productIds.add(product1.getId())) {
+                    throw new DuplicateProductException("Duplicate product IDs are not allowed in an order.");
+                }
+                if (product1.getStockQuantity() >= items.getQuantity()) {
+                    OrderItem item = new OrderItem();
                     item.setProduct(product1);
                     item.setQuantity(items.getQuantity());
                     item.setUnitPrice(product1.getPrice());
@@ -60,10 +63,10 @@ public class OrderService {
                     orderItems.add(item);
                     totalAmount = totalAmount.add(item.getSubtotal());
                     product1.setStockQuantity(product1.getStockQuantity() - items.getQuantity());
-                }
-                else{
+                } else {
                     throw new InsufficientStockException("Insufficient stock available for the requested quantity");
                 }
+
             }
             else{
                 throw new ProductNotFoundException("Product does not exist");
