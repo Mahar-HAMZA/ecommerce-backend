@@ -11,6 +11,7 @@ import com.hamza.ecommerce_backend.order.exception.DuplicateProductException;
 import com.hamza.ecommerce_backend.order.exception.InsufficientStockException;
 import com.hamza.ecommerce_backend.order.exception.OrderAccessDeniedException;
 import com.hamza.ecommerce_backend.order.exception.OrderNotFoundException;
+import com.hamza.ecommerce_backend.product.exception.InactiveProductException;
 import com.hamza.ecommerce_backend.product.exception.ProductAlreadyExistsException;
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import com.hamza.ecommerce_backend.user.exception.EmailAlreadyExistsException;
@@ -165,5 +166,10 @@ public class GlobalExceptionHandler{
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    @ExceptionHandler(InactiveProductException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleInactiveProduct(InactiveProductException ex) {
+        CategoryExceptionResponse response = new CategoryExceptionResponse(409, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
 
 }

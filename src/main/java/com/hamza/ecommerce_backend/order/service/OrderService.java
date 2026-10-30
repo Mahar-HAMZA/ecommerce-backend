@@ -9,6 +9,8 @@ import com.hamza.ecommerce_backend.order.exception.OrderNotFoundException;
 import com.hamza.ecommerce_backend.order.mapper.OrderMapper;
 import com.hamza.ecommerce_backend.order.repository.*;
 import com.hamza.ecommerce_backend.product.entity.Product;
+import com.hamza.ecommerce_backend.product.entity.ProductStatus;
+import com.hamza.ecommerce_backend.product.exception.InactiveProductException;
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import com.hamza.ecommerce_backend.product.repository.ProductRepository;
 import com.hamza.ecommerce_backend.user.entity.Role;
@@ -52,6 +54,9 @@ public class OrderService {
                 Product product1 = product.get();
                 if (!productIds.add(product1.getId())) {
                     throw new DuplicateProductException("Duplicate product IDs are not allowed in an order.");
+                }
+                if(product1.getStatus() == ProductStatus.INACTIVE){
+                    throw new InactiveProductException("Inactive products cannot be ordered.");
                 }
                 if (product1.getStockQuantity() >= items.getQuantity()) {
                     OrderItem item = new OrderItem();
