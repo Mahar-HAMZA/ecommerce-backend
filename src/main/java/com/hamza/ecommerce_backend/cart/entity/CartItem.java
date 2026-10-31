@@ -2,24 +2,28 @@ package com.hamza.ecommerce_backend.cart.entity;
 
 import com.hamza.ecommerce_backend.product.entity.Product;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
-@Table(name = "cart_items")
+@Table(name = "cart_items", uniqueConstraints = {@UniqueConstraint(
+        columnNames = {"cart_id", "product_id"})
+        }
+)
 public class CartItem {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false) @Min(1)
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id")
+    @JoinColumn(name = "cart_id",  nullable = false)
     private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id",  nullable = false)
     private Product product;
 
     public Long getId() {

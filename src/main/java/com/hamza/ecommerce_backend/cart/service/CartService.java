@@ -5,19 +5,24 @@ import com.hamza.ecommerce_backend.cart.entity.*;
 import com.hamza.ecommerce_backend.cart.exception.*;
 import com.hamza.ecommerce_backend.cart.mapper.CartMapper;
 import com.hamza.ecommerce_backend.cart.repository.*;
+import com.hamza.ecommerce_backend.order.exception.DuplicateProductException;
 import com.hamza.ecommerce_backend.order.exception.InsufficientStockException;
 import com.hamza.ecommerce_backend.product.entity.Product;
+import com.hamza.ecommerce_backend.product.entity.ProductStatus;
+import com.hamza.ecommerce_backend.product.exception.InactiveProductException;
 import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import com.hamza.ecommerce_backend.product.repository.ProductRepository;
 import com.hamza.ecommerce_backend.user.entity.User;
 import com.hamza.ecommerce_backend.user.exception.UserNotFoundException;
 import com.hamza.ecommerce_backend.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CartService {
@@ -38,7 +43,7 @@ public class CartService {
 
     @Transactional
     public CartResponseDTO addToCart(AddCartDTO dto) {
-
+        Set<Long> productIds=new HashSet<>();
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Cart> cart = cartRepo.findByUser_Email(email);
         Cart existCart;
@@ -66,6 +71,12 @@ public class CartService {
                 throw new ProductNotFoundException("Product does not exist");
             }
             Product existProduct = product.get();
+            if (!productIds.add(existProduct.getId())) {
+                throw new DuplicateProductException("Duplicate product IDs are not allowed in a cart.");
+            }
+            if(existProduct.getStatus() == ProductStatus.INACTIVE){
+                throw new InactiveProductException("Inactive products cannot be added to cart.");
+            }
 
             if (dtoItem.getQuantity() > existProduct.getStockQuantity()) {
                 throw new InsufficientStockException("Insufficient stock available for the requested quantity");
@@ -96,6 +107,7 @@ public class CartService {
         return cartMapper.toDTO(savedCart);
     }
 
+    @Transactional(readOnly = true)
     public CartResponseDTO getMyCart() {
 
         String email=SecurityContextHolder.getContext().getAuthentication().getName();
@@ -127,6 +139,9 @@ public class CartService {
 
         Product product = existCartItem.getProduct();
 
+        if(product.getStatus() == ProductStatus.INACTIVE){
+            throw new InactiveProductException("Inactive products cannot be updated in cart.");
+        }
         if (dto.getQuantity() > product.getStockQuantity()) {
             throw new InsufficientStockException("Insufficient stock available for the requested quantity");
         }
@@ -154,7 +169,6 @@ public class CartService {
             throw new UnauthorizedCartAccessException("You are not authorized to access this cart item");
         }
         cart.getCartItems().remove(existCartItem);
-        cartItemRepo.delete(existCartItem);
 
         return cartMapper.toDTO(cart);
     }
@@ -171,9 +185,8 @@ public class CartService {
 
         Cart existCart = cart.get();
         existCart.getCartItems().clear();
-        Cart clearedCart = cartRepo.save(existCart);
 
-        return cartMapper.toDTO(clearedCart);
+        return cartMapper.toDTO(existCart);
     }
 
 }
