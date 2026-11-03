@@ -2,6 +2,7 @@ package com.hamza.ecommerce_backend.exception;
 
 import com.hamza.ecommerce_backend.cart.exception.CartItemNotFoundException;
 import com.hamza.ecommerce_backend.cart.exception.CartNotFoundException;
+import com.hamza.ecommerce_backend.cart.exception.EmptyCartException;
 import com.hamza.ecommerce_backend.cart.exception.UnauthorizedCartAccessException;
 import com.hamza.ecommerce_backend.category.exception.CategoryAlreadyExistsException;
 import com.hamza.ecommerce_backend.category.exception.CategoryDeletionNotAllowedException;
@@ -169,6 +170,16 @@ public class GlobalExceptionHandler{
     @ExceptionHandler(InactiveProductException.class)
     public ResponseEntity<CategoryExceptionResponse> handleInactiveProduct(InactiveProductException ex) {
         CategoryExceptionResponse response = new CategoryExceptionResponse(409, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(EmptyCartException.class)
+    public ResponseEntity<CategoryExceptionResponse> handleEmptyCartException(EmptyCartException ex) {
+        CategoryExceptionResponse response = new CategoryExceptionResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage()
+        );
+
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 

@@ -4,6 +4,8 @@ import com.hamza.ecommerce_backend.cart.DTO.AddCartDTO;
 import com.hamza.ecommerce_backend.cart.DTO.CartResponseDTO;
 import com.hamza.ecommerce_backend.cart.DTO.UpdateCartItemDTO;
 import com.hamza.ecommerce_backend.cart.service.CartService;
+import com.hamza.ecommerce_backend.order.DTO.OrderDTO;
+import com.hamza.ecommerce_backend.order.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +14,22 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
+    private final OrderService orderService;
 
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, OrderService orderService) {
         this.cartService = cartService;
+        this.orderService=orderService;
     }
 
     @PostMapping
     public CartResponseDTO addToCart(@RequestBody @Valid AddCartDTO dto) {
 
         return cartService.addToCart(dto);
+    }
+
+    @PostMapping("/checkout")
+    public OrderDTO checkoutCart() {
+        return orderService.checkoutCart();
     }
 
     @GetMapping

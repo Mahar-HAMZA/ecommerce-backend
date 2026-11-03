@@ -21,12 +21,6 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping
-    public ResponseEntity<OrderDTO> makeOrder(@RequestBody @Valid OrderCreateDTO dto){
-        OrderDTO response=orderService.makeOrder(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     @GetMapping("/{id}")
     public OrderDTO getOrderById(@PathVariable Long id){
         return orderService.getOrderById(id);

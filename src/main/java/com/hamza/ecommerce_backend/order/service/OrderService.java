@@ -1,5 +1,10 @@
 package com.hamza.ecommerce_backend.order.service;
 
+import com.hamza.ecommerce_backend.cart.entity.Cart;
+import com.hamza.ecommerce_backend.cart.entity.CartItem;
+import com.hamza.ecommerce_backend.cart.exception.CartNotFoundException;
+import com.hamza.ecommerce_backend.cart.exception.EmptyCartException;
+import com.hamza.ecommerce_backend.cart.repository.CartRepository;
 import com.hamza.ecommerce_backend.order.DTO.*;
 import com.hamza.ecommerce_backend.order.entity.*;
 import com.hamza.ecommerce_backend.order.exception.DuplicateProductException;
@@ -32,14 +37,16 @@ public class OrderService {
     private final OrderRepository OrderRepo;
     private final ProductRepository productRepo;
     private final UserRepository userRepo;
+    private final CartRepository cartRepo;
 
     public OrderService(OrderMapper mapper, OrderItemRepository OrderItemRepo, OrderRepository OrderRepo,
-                        ProductRepository productRepo, UserRepository userRepo) {
+                        ProductRepository productRepo, UserRepository userRepo, CartRepository cartRepo) {
         this.mapper=mapper;
         this.OrderItemRepo=OrderItemRepo;
         this.OrderRepo=OrderRepo;
         this.productRepo=productRepo;
         this.userRepo=userRepo;
+        this.cartRepo=cartRepo;
     }
 
     @Transactional
@@ -53,7 +60,7 @@ public class OrderService {
             Optional<Product> product=productRepo.findByIdWithLock(items.getProductId());
             if(product.isPresent()) {
                 Product product1 = product.get();
-                if (!productIds.add(product1.getId())) {
+                if(!productIds.add(product1.getId())) {
                     throw new DuplicateProductException("Duplicate product IDs are not allowed in an order.");
                 }
                 if(product1.getStatus() == ProductStatus.INACTIVE){
@@ -85,6 +92,51 @@ public class OrderService {
         order.setTotalAmount(totalAmount);
         Order savedOrder = OrderRepo.save(order);
         return mapper.toDTO(savedOrder);
+    }
+
+    @Transactional
+    public OrderDTO checkoutCart() {
+
+        // 1. Get authenticated user's email
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        // 2. Fetch user's cart
+        Cart cart = cartRepo.findByUser_Email(email)
+                .orElseThrow(() ->
+                        new CartNotFoundException("Cart does not exist"));
+
+        // 3. Validate cart is not empty
+        if (cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
+            throw new EmptyCartException("Cannot checkout an empty cart");
+        }
+
+        // 4. Convert CartItems into OrderItemCreateDTO
+        List<OrderItemCreateDTO> orderItems = new ArrayList<>();
+
+        for (CartItem cartItem : cart.getCartItems()) {
+
+            OrderItemCreateDTO itemDTO = new OrderItemCreateDTO();
+
+            itemDTO.setProductId(cartItem.getProduct().getId());
+            itemDTO.setQuantity(cartItem.getQuantity());
+
+            orderItems.add(itemDTO);
+        }
+
+        // 5. Create OrderCreateDTO
+        OrderCreateDTO orderDTO = new OrderCreateDTO();
+        orderDTO.setItems(orderItems);
+
+        // 6. Reuse existing order creation logic
+        OrderDTO createdOrder = makeOrder(orderDTO);
+
+        // 7. Clear cart after successful order creation
+        cart.getCartItems().clear();
+
+        return createdOrder;
     }
 
     public OrderDTO getOrderById(Long id){
