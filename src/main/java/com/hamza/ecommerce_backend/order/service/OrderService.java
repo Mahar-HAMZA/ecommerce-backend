@@ -15,8 +15,9 @@ import com.hamza.ecommerce_backend.product.exception.ProductNotFoundException;
 import com.hamza.ecommerce_backend.product.repository.ProductRepository;
 import com.hamza.ecommerce_backend.user.entity.Role;
 import com.hamza.ecommerce_backend.user.entity.User;
+import com.hamza.ecommerce_backend.user.exception.UserNotFoundException;
 import com.hamza.ecommerce_backend.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,7 @@ public class OrderService {
         BigDecimal totalAmount=BigDecimal.ZERO;
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         for(OrderItemCreateDTO items : dto.getItems()){
-            Optional<Product> product=productRepo.findById(items.getProductId());
+            Optional<Product> product=productRepo.findByIdWithLock(items.getProductId());
             if(product.isPresent()) {
                 Product product1 = product.get();
                 if (!productIds.add(product1.getId())) {
@@ -77,8 +78,8 @@ public class OrderService {
                 throw new ProductNotFoundException("Product does not exist");
             }
         }
-        Optional<User> loginUser=userRepo.findByEmail(email);
-        User user=loginUser.get();
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         order.setUser(user);
         order.setOrderItems(orderItems);
         order.setTotalAmount(totalAmount);
@@ -89,10 +90,10 @@ public class OrderService {
     public OrderDTO getOrderById(Long id){
         Optional<Order> order=OrderRepo.findById(id);
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> loginUser=userRepo.findByEmail(email);
-        User user=loginUser.get();
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         if(!order.isPresent()){
-            throw new ProductNotFoundException("Order does not exist");
+            throw new OrderNotFoundException("Order does not exist");
         }
         Order getOrder=order.get();
         if(user.getRole() == Role.ADMIN){
@@ -109,8 +110,8 @@ public class OrderService {
     public List<OrderDTO> getAllOrders(){
         List<OrderDTO> dto=new ArrayList<>();
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> user=userRepo.findByEmail(email);
-        User loginUser=user.get();
+        User loginUser = userRepo.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         if(loginUser.getRole() == Role.CUSTOMER){
             List<Order> customerOrder=OrderRepo.findByUser_EmailOrderByCreatedAtDesc(email);
             for(Order order : customerOrder){

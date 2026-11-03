@@ -3,6 +3,7 @@ package com.hamza.ecommerce_backend.cart.entity;
 import com.hamza.ecommerce_backend.product.entity.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "cart_items", uniqueConstraints = {@UniqueConstraint(
@@ -15,7 +16,7 @@ public class CartItem {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false) @Min(1)
+    @Column(nullable = false) @Min(1) @NotNull
     private Integer quantity;
 
     @ManyToOne
