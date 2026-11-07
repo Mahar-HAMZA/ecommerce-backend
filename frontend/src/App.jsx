@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import {
     Search,
@@ -13,29 +12,39 @@ import {
     Headphones,
     RefreshCw,
     X,
+    Menu,
+    ChevronDown,
+    CreditCard,
+    ArrowUpRight,
 } from 'lucide-react'
+
+import novaLogo from './assets/nova-logo.svg'
 import './App.css'
 
 const categories = [
     {
         name: 'Electronics',
-        image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=700',
-        count: 'Technology & gadgets',
+        count: '120+ Products',
+        image:
+            'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600',
     },
     {
         name: 'Fashion',
-        image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=700',
-        count: 'Clothing & footwear',
+        count: '250+ Products',
+        image:
+            'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600',
     },
     {
         name: 'Accessories',
-        image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=700',
-        count: 'Everyday essentials',
+        count: '85+ Products',
+        image:
+            'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600',
     },
     {
         name: 'Home & Living',
-        image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=700',
-        count: 'For your living space',
+        count: '95+ Products',
+        image:
+            'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=600',
     },
 ]
 
@@ -44,89 +53,120 @@ const products = [
         id: 1,
         name: 'Premium Wireless Headphones',
         category: 'Electronics',
-        price: '$89.00',
-        oldPrice: '$119.00',
-        rating: '4.9',
-        reviews: '128',
+        price: 89,
+        oldPrice: 119,
+        rating: 4.9,
+        reviews: 128,
         tag: 'BESTSELLER',
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800',
+        image:
+            'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800',
     },
     {
         id: 2,
         name: 'Classic Minimal Watch',
         category: 'Accessories',
-        price: '$120.00',
-        oldPrice: '',
-        rating: '4.8',
-        reviews: '96',
+        price: 120,
+        rating: 4.8,
+        reviews: 96,
         tag: 'POPULAR',
-        image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800',
+        image:
+            'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800',
     },
     {
         id: 3,
         name: 'Everyday Sneakers',
         category: 'Fashion',
-        price: '$75.00',
-        oldPrice: '$95.00',
-        rating: '4.7',
-        reviews: '84',
+        price: 75,
+        oldPrice: 95,
+        rating: 4.7,
+        reviews: 84,
         tag: 'SALE',
-        image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800',
+        image:
+            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800',
     },
     {
         id: 4,
         name: 'Urban Travel Backpack',
         category: 'Accessories',
-        price: '$65.00',
-        oldPrice: '',
-        rating: '4.8',
-        reviews: '73',
+        price: 65,
+        rating: 4.8,
+        reviews: 73,
         tag: 'NEW',
-        image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800',
+        image:
+            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800',
     },
     {
         id: 5,
         name: 'Modern Wireless Speaker',
         category: 'Electronics',
-        price: '$59.00',
-        oldPrice: '$79.00',
-        rating: '4.8',
-        reviews: '64',
+        price: 59,
+        oldPrice: 79,
+        rating: 4.8,
+        reviews: 64,
         tag: 'FEATURED',
-        image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800',
+        image:
+            'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800',
     },
     {
         id: 6,
         name: 'Contemporary Living Chair',
         category: 'Home & Living',
-        price: '$149.00',
-        oldPrice: '',
-        rating: '4.9',
-        reviews: '42',
+        price: 149,
+        rating: 4.9,
+        reviews: 42,
         tag: 'NEW',
-        image: 'https://images.unsplash.com/photo-1598300056393-4aac492f4344?w=800',
+        image:
+            'https://images.unsplash.com/photo-1598300056393-4aac492f4344?w=800',
     },
     {
         id: 7,
         name: 'Classic Everyday Jacket',
         category: 'Fashion',
-        price: '$95.00',
-        oldPrice: '$115.00',
-        rating: '4.7',
-        reviews: '51',
+        price: 95,
+        oldPrice: 115,
+        rating: 4.7,
+        reviews: 51,
         tag: 'POPULAR',
-        image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800',
+        image:
+            'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800',
     },
     {
         id: 8,
         name: 'Minimal Table Lamp',
         category: 'Home & Living',
-        price: '$48.00',
-        oldPrice: '',
-        rating: '4.8',
-        reviews: '38',
+        price: 48,
+        rating: 4.8,
+        reviews: 38,
         tag: 'FEATURED',
-        image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800',
+        image:
+            'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800',
+    },
+]
+
+const promotions = [
+    {
+        title: 'Refresh Your Space',
+        subtitle: 'Thoughtful details for everyday living.',
+        category: 'Home & Living',
+        image:
+            'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=900',
+        className: 'promo-home',
+    },
+    {
+        title: 'Everyday Style',
+        subtitle: 'Discover pieces made to stand out.',
+        category: 'Fashion',
+        image:
+            'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900',
+        className: 'promo-fashion',
+    },
+    {
+        title: 'Upgrade Your Tech',
+        subtitle: 'Smart picks for modern living.',
+        category: 'Electronics',
+        image:
+            'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=900',
+        className: 'promo-tech',
     },
 ]
 
@@ -139,7 +179,8 @@ function App() {
 
     const filteredProducts = products.filter((product) => {
         const matchesCategory =
-            selectedCategory === 'All' || product.category === selectedCategory
+            selectedCategory === 'All' ||
+            product.category === selectedCategory
 
         const matchesSearch = product.name
             .toLowerCase()
@@ -150,372 +191,513 @@ function App() {
 
     const selectCategory = (category) => {
         setSelectedCategory(category)
-        document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })
+        setMenuOpen(false)
+
+        document.getElementById('products')?.scrollIntoView({
+            behavior: 'smooth',
+        })
     }
 
     const toggleWishlist = (productId) => {
-        setWishlist((current) =>
-            current.includes(productId)
-                ? current.filter((id) => id !== productId)
-                : [...current, productId],
+        setWishlist((currentWishlist) =>
+            currentWishlist.includes(productId)
+                ? currentWishlist.filter((id) => id !== productId)
+                : [...currentWishlist, productId],
         )
     }
 
+    const handleNewsletterSubmit = (event) => {
+        event.preventDefault()
+    }
+
     return (
-        <div className="store">
+        <>
             <div className="announcement-bar">
-                <span>Complimentary shipping on orders over $100</span>
-                <a href="#products">Discover more <ArrowRight size={13} /></a>
+                <div className="announcement-inner">
+                    <p>
+                        <Truck size={15} />
+                        Discover something new with NOVA.
+                    </p>
+
+                    <div className="announcement-links">
+                        <a href="#products">Explore Products</a>
+                        <span>|</span>
+                        <a href="#footer">Customer Support</a>
+                    </div>
+                </div>
             </div>
 
-            <header className="navbar">
-                <a href="#home" className="logo" aria-label="NOVA home">
-                    NOVA<span>.</span>
-                </a>
-
-                <button
-                    className="mobile-menu-button"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
-                >
-                    {menuOpen ? <X size={23} /> : <span className="menu-lines">☰</span>}
-                </button>
-
-                <nav className={`nav-links ${menuOpen ? 'nav-open' : ''}`} aria-label="Main navigation">
-                    <a className="active" href="#home" onClick={() => setMenuOpen(false)}>Home</a>
-                    <a href="#categories" onClick={() => setMenuOpen(false)}>Categories</a>
-                    <a href="#products" onClick={() => setMenuOpen(false)}>Shop</a>
-                    <a href="#about" onClick={() => setMenuOpen(false)}>Our Story</a>
-                    <a href="#footer" onClick={() => setMenuOpen(false)}>Contact</a>
-                </nav>
-
-                <div className="nav-actions">
-                    <form className="search-box" onSubmit={(event) => {
-                        event.preventDefault()
-                        document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })
-                    }}>
-                        <Search size={17} />
-                        <input
-                            type="search"
-                            placeholder="Search products..."
-                            aria-label="Search products"
-                            value={searchTerm}
-                            onChange={(event) => {
-                                setSearchTerm(event.target.value)
-                                setSelectedCategory('All')
-                            }}
-                        />
-                    </form>
-
-                    <a href="#login" className="icon-action" aria-label="My account">
-                        <UserRound size={21} />
+            <header className="site-header">
+                <div className="main-header container">
+                    <a href="#home" className="brand-logo">
+                        <img src={novaLogo} alt="NOVA - Shop smarter. Live better." />
                     </a>
 
-                    <a href="#cart" className="icon-action bag-action" aria-label="Shopping bag">
-                        <ShoppingBag size={21} />
-                        <span className="bag-count">{cartCount}</span>
-                    </a>
+                    <nav className={`main-nav ${menuOpen ? 'nav-open' : ''}`}>
+                        <a href="#home" onClick={() => setMenuOpen(false)}>
+                            Home
+                        </a>
+
+                        <a href="#categories" onClick={() => setMenuOpen(false)}>
+                            Categories <ChevronDown size={14} />
+                        </a>
+
+                        <a href="#products" onClick={() => setMenuOpen(false)}>
+                            Shop
+                        </a>
+
+                        <a href="#story" onClick={() => setMenuOpen(false)}>
+                            About
+                        </a>
+
+                        <a href="#footer" onClick={() => setMenuOpen(false)}>
+                            Contact
+                        </a>
+                    </nav>
+
+                    <div className="header-actions">
+                        <div className="header-search">
+                            <Search size={18} />
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                value={searchTerm}
+                                onChange={(event) => {
+                                    setSearchTerm(event.target.value)
+                                    document.getElementById('products')?.scrollIntoView({
+                                        behavior: 'smooth',
+                                    })
+                                }}
+                            />
+                        </div>
+
+                        <a
+                            href="#products"
+                            className="header-icon"
+                            aria-label="Wishlist"
+                        >
+                            <Heart size={21} />
+                            {wishlist.length > 0 && (
+                                <span className="icon-count">{wishlist.length}</span>
+                            )}
+                        </a>
+
+                        <a
+                            href="#products"
+                            className="header-icon"
+                            aria-label="Shopping cart"
+                        >
+                            <ShoppingBag size={21} />
+                            {cartCount > 0 && (
+                                <span className="icon-count">{cartCount}</span>
+                            )}
+                        </a>
+
+                        <a
+                            href="#footer"
+                            className="header-icon account-icon"
+                            aria-label="Account"
+                        >
+                            <UserRound size={21} />
+                        </a>
+
+                        <button
+                            className="mobile-menu-button"
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            aria-label="Toggle navigation"
+                        >
+                            {menuOpen ? <X size={25} /> : <Menu size={25} />}
+                        </button>
+                    </div>
                 </div>
             </header>
 
             <main>
-                <section className="hero" id="home">
-                    <div className="hero-overlay" />
-
-                    <div className="hero-content">
-            <span className="hero-kicker">
-              <span className="kicker-line" />
-              THE ART OF EVERYDAY SHOPPING
-            </span>
-
-                        <h1>
-                            Find what you love.
-                            <br />
-                            <span>Love what you find.</span>
-                        </h1>
-
-                        <p>
-                            Discover a world of thoughtfully selected products.
-                            From everyday essentials to things that make life special,
-                            find it all in one place.
-                        </p>
-
-                        <div className="hero-buttons">
-                            <a href="#categories" className="primary-button">
-                                Explore Collection <ArrowRight size={17} />
-                            </a>
-                            <a href="#about" className="hero-text-link">
-                                Discover NOVA
-                            </a>
+                <section className="hero-section container" id="home">
+                    <aside className="category-sidebar">
+                        <div className="sidebar-heading">
+                            <Menu size={19} />
+                            <h2>Categories</h2>
                         </div>
 
-                        <div className="hero-note">
-                            <span className="hero-note-dot" />
-                            A better shopping experience starts here.
-                        </div>
-                    </div>
-
-                    <div className="hero-side-label">
-                        DISCOVER YOUR NEXT FAVORITE
-                    </div>
-
-                    <a href="#categories" className="hero-scroll">
-                        <span>SCROLL TO EXPLORE</span>
-                        <span className="scroll-line" />
-                    </a>
-                </section>
-
-                <section className="benefits">
-                    <div className="benefit-item">
-                        <Truck />
-                        <div>
-                            <h3>Free Shipping</h3>
-                            <p>On qualifying orders</p>
-                        </div>
-                    </div>
-
-                    <div className="benefit-item">
-                        <ShieldCheck />
-                        <div>
-                            <h3>Secure Shopping</h3>
-                            <p>Your safety matters</p>
-                        </div>
-                    </div>
-
-                    <div className="benefit-item">
-                        <RefreshCw />
-                        <div>
-                            <h3>Easy Returns</h3>
-                            <p>A simple return process</p>
-                        </div>
-                    </div>
-
-                    <div className="benefit-item">
-                        <Headphones />
-                        <div>
-                            <h3>Customer Support</h3>
-                            <p>Here when you need us</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="categories-section section-container" id="categories">
-                    <div className="section-heading">
-                        <div>
-                            <span className="section-kicker">EXPLORE NOVA</span>
-                            <h2>Explore our <span>collections.</span></h2>
-                            <p>Discover something you'll love in every category.</p>
-                        </div>
-
-                        <button className="outline-link" onClick={() => selectCategory('All')}>
-                            Explore all products <ArrowRight size={17} />
+                        <button onClick={() => selectCategory('All')}>
+                            <span>All Products</span>
+                            <ArrowRight size={16} />
                         </button>
-                    </div>
 
-                    <div className="category-circles">
                         {categories.map((category) => (
                             <button
-                                className={`category-circle-card ${
-                                    selectedCategory === category.name ? 'selected' : ''
-                                }`}
                                 key={category.name}
                                 onClick={() => selectCategory(category.name)}
                             >
-                <span className="category-circle-image">
-                  <img src={category.image} alt={category.name} />
-                  <span className="category-circle-arrow">
-                    <ArrowRight size={19} />
+                                <span>{category.name}</span>
+                                <ArrowRight size={16} />
+                            </button>
+                        ))}
+
+                        <div className="sidebar-note">
+                            <span>FIND YOUR NEXT FAVORITE</span>
+                            <p>Discover products that make everyday life better.</p>
+                            <a href="#products">
+                                Explore now <ArrowUpRight size={15} />
+                            </a>
+                        </div>
+                    </aside>
+
+                    <div className="hero-banner">
+                        <div className="hero-overlay" />
+
+                        <div className="hero-content">
+              <span className="hero-eyebrow">
+                THE NOVA COLLECTION
+              </span>
+
+                            <h1>
+                                Everything you love,
+                                <br />
+                                all in one place.
+                            </h1>
+
+                            <p>
+                                Discover thoughtfully selected products for your
+                                lifestyle, your space, and everything in between.
+                            </p>
+
+                            <div className="hero-buttons">
+                                <a href="#products" className="primary-button">
+                                    Shop Now <ArrowRight size={17} />
+                                </a>
+
+                                <a href="#categories" className="secondary-button">
+                                    Explore Categories
+                                </a>
+                            </div>
+
+                            <div className="hero-bottom">
+                                <span>01 / 03</span>
+                                <div className="hero-progress">
+                                    <span />
+                                </div>
+                                <span>Curated for everyday living</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="benefits-section container">
+                    <div className="benefit-item">
+                        <div className="benefit-icon">
+                            <Truck size={23} />
+                        </div>
+                        <div>
+                            <h3>Convenient Delivery</h3>
+                            <p>Shopping made simple</p>
+                        </div>
+                    </div>
+
+                    <div className="benefit-item">
+                        <div className="benefit-icon">
+                            <ShieldCheck size={23} />
+                        </div>
+                        <div>
+                            <h3>Secure Shopping</h3>
+                            <p>Your security matters</p>
+                        </div>
+                    </div>
+
+                    <div className="benefit-item">
+                        <div className="benefit-icon">
+                            <CreditCard size={23} />
+                        </div>
+                        <div>
+                            <h3>Flexible Payments</h3>
+                            <p>Convenient checkout</p>
+                        </div>
+                    </div>
+
+                    <div className="benefit-item">
+                        <div className="benefit-icon">
+                            <Headphones size={23} />
+                        </div>
+                        <div>
+                            <h3>Customer Support</h3>
+                            <p>Here to help you</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="promotions-section container">
+                    <div className="section-heading">
+                        <div>
+                            <span className="section-eyebrow">EXPLORE NOVA</span>
+                            <h2>Discover your next favorite</h2>
+                            <p>Explore collections selected for every part of your life.</p>
+                        </div>
+
+                        <a href="#categories" className="text-link">
+                            View Categories <ArrowRight size={17} />
+                        </a>
+                    </div>
+
+                    <div className="promotion-grid">
+                        {promotions.map((promotion) => (
+                            <button
+                                className={`promotion-card ${promotion.className}`}
+                                key={promotion.category}
+                                onClick={() => selectCategory(promotion.category)}
+                            >
+                                <img src={promotion.image} alt={promotion.title} />
+
+                                <div className="promotion-overlay" />
+
+                                <div className="promotion-content">
+                                    <span>{promotion.category}</span>
+                                    <h3>{promotion.title}</h3>
+                                    <p>{promotion.subtitle}</p>
+                                    <div className="promotion-link">
+                                        Explore Collection <ArrowRight size={16} />
+                                    </div>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="categories-section container" id="categories">
+                    <div className="section-heading">
+                        <div>
+                            <span className="section-eyebrow">SHOP BY CATEGORY</span>
+                            <h2>Find what you're looking for</h2>
+                            <p>Browse our collections and discover more.</p>
+                        </div>
+                    </div>
+
+                    <div className="category-grid">
+                        {categories.map((category) => (
+                            <button
+                                className="category-card"
+                                key={category.name}
+                                onClick={() => selectCategory(category.name)}
+                            >
+                                <div className="category-image">
+                                    <img src={category.image} alt={category.name} />
+                                    <span className="category-arrow">
+                    <ArrowUpRight size={19} />
                   </span>
-                </span>
-                                <strong>{category.name}</strong>
-                                <span className="category-circle-description">{category.count}</span>
+                                </div>
+
+                                <h3>{category.name}</h3>
+                                <p>{category.count}</p>
                             </button>
                         ))}
                     </div>
                 </section>
 
                 <section className="products-section" id="products">
-                    <div className="section-container">
-                        <div className="section-heading">
+                    <div className="container">
+                        <div className="section-heading product-heading">
                             <div>
-                                <span className="section-kicker">THE NOVA EDIT</span>
-                                <h2>
-                                    {selectedCategory === 'All'
-                                        ? <>Favorites worth <span>finding.</span></>
-                                        : <>Explore <span>{selectedCategory}.</span></>}
-                                </h2>
-                                <p>
-                                    {selectedCategory === 'All'
-                                        ? 'A selection of products to get your shopping started.'
-                                        : `Discover our ${selectedCategory} collection.`}
-                                </p>
+                                <span className="section-eyebrow">OUR COLLECTION</span>
+                                <h2>Popular products</h2>
+                                <p>Explore some of our favorite picks.</p>
                             </div>
 
-                            <button className="outline-link" onClick={() => setSelectedCategory('All')}>
-                                View all products <ArrowRight size={17} />
-                            </button>
+                            <a href="#categories" className="text-link">
+                                Browse Categories <ArrowRight size={17} />
+                            </a>
                         </div>
 
-                        <div className="product-grid">
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
+                        <div className="product-filters">
+                            {['All', ...categories.map((category) => category.name)].map(
+                                (category) => (
+                                    <button
+                                        key={category}
+                                        className={
+                                            selectedCategory === category ? 'filter-active' : ''
+                                        }
+                                        onClick={() => setSelectedCategory(category)}
+                                    >
+                                        {category}
+                                    </button>
+                                ),
+                            )}
+                        </div>
+
+                        {filteredProducts.length > 0 ? (
+                            <div className="product-grid">
+                                {filteredProducts.map((product) => (
                                     <article className="product-card" key={product.id}>
                                         <div className="product-image">
                                             <img src={product.image} alt={product.name} />
+
                                             <span className="product-tag">{product.tag}</span>
 
                                             <button
-                                                className={`wishlist-button ${wishlist.includes(product.id) ? 'wishlisted' : ''}`}
+                                                className={`wishlist-button ${
+                                                    wishlist.includes(product.id)
+                                                        ? 'wishlist-active'
+                                                        : ''
+                                                }`}
                                                 onClick={() => toggleWishlist(product.id)}
-                                                aria-label={`Add ${product.name} to wishlist`}
+                                                aria-label="Toggle wishlist"
                                             >
-                                                <Heart size={19} fill={wishlist.includes(product.id) ? 'currentColor' : 'none'} />
+                                                <Heart size={19} />
+                                            </button>
+
+                                            <button
+                                                className="quick-add-button"
+                                                onClick={() => setCartCount((count) => count + 1)}
+                                            >
+                                                <Plus size={17} /> Add to Cart
                                             </button>
                                         </div>
 
                                         <div className="product-info">
-                                            <span className="product-category">{product.category}</span>
+                      <span className="product-category">
+                        {product.category}
+                      </span>
+
                                             <h3>{product.name}</h3>
 
                                             <div className="product-rating">
-                                                <Star size={13} fill="currentColor" />
+                                                <Star size={14} fill="currentColor" />
                                                 <strong>{product.rating}</strong>
-                                                <span className="review-count">({product.reviews} reviews)</span>
+                                                <span>({product.reviews} reviews)</span>
                                             </div>
 
-                                            <div className="product-bottom">
-                                                <div className="product-prices">
-                                                    <strong>{product.price}</strong>
-                                                    {product.oldPrice && <del>{product.oldPrice}</del>}
-                                                </div>
+                                            <div className="product-price">
+                                                <strong>${product.price.toFixed(2)}</strong>
 
-                                                <button
-                                                    className="add-button"
-                                                    onClick={() => setCartCount((count) => count + 1)}
-                                                    aria-label={`Add ${product.name} to cart`}
-                                                >
-                                                    <Plus size={19} />
-                                                </button>
+                                                {product.oldPrice && (
+                                                    <del>${product.oldPrice.toFixed(2)}</del>
+                                                )}
                                             </div>
                                         </div>
                                     </article>
-                                ))
-                            ) : (
-                                <div className="no-products">
-                                    <Search size={30} />
-                                    <h3>No products found</h3>
-                                    <p>Try another search or explore all products.</p>
-                                    <button className="primary-button" onClick={() => {
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="empty-products">
+                                <Search size={30} />
+                                <h3>No products found</h3>
+                                <p>Try another search term or select a different category.</p>
+                                <button
+                                    className="primary-button"
+                                    onClick={() => {
                                         setSearchTerm('')
                                         setSelectedCategory('All')
-                                    }}>
-                                        Show all products <ArrowRight size={17} />
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                                    }}
+                                >
+                                    Clear Filters
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </section>
 
-                <section className="story-section section-container" id="about">
+                <section className="story-section container" id="story">
                     <div className="story-image">
                         <img
                             src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1100"
-                            alt="Beautifully arranged shopping bags"
+                            alt="NOVA shopping collection"
                         />
-                        <div className="story-image-caption">
-                            <span>THE NOVA EXPERIENCE</span>
-                            <strong>Discover something different.</strong>
-                        </div>
                     </div>
 
                     <div className="story-content">
-                        <span className="section-kicker">MORE THAN JUST SHOPPING</span>
+                        <span className="section-eyebrow">THE NOVA EXPERIENCE</span>
                         <h2>
-                            Everyday finds.
+                            Better choices.
                             <br />
-                            <span>Exceptional moments.</span>
+                            Better everyday living.
                         </h2>
 
                         <p>
-                            We believe finding the right product should feel effortless.
-                            Explore a carefully presented collection and enjoy a shopping
-                            experience designed around you.
+                            At NOVA, we believe shopping should be simple, inspiring,
+                            and enjoyable. Our goal is to bring together products
+                            that add value to your everyday life.
                         </p>
 
                         <a href="#products" className="primary-button">
-                            Start exploring <ArrowRight size={17} />
+                            Discover NOVA <ArrowRight size={17} />
                         </a>
                     </div>
                 </section>
 
-                <section className="newsletter">
-                    <div className="newsletter-content">
-                        <span className="newsletter-kicker">THE NOVA NEWSLETTER</span>
-                        <h2>Good things are worth sharing.</h2>
-                        <p>
-                            Be the first to hear about new arrivals, featured collections
-                            and updates from NOVA.
-                        </p>
+                <section className="newsletter-section">
+                    <div className="container newsletter-content">
+                        <div>
+                            <span className="section-eyebrow">STAY IN THE LOOP</span>
+                            <h2>Something good is coming.</h2>
+                            <p>
+                                Subscribe to stay updated with new collections and
+                                product highlights.
+                            </p>
+                        </div>
 
                         <form
                             className="newsletter-form"
-                            onSubmit={(event) => event.preventDefault()}
+                            onSubmit={handleNewsletterSubmit}
                         >
                             <input
                                 type="email"
-                                placeholder="Your email address"
-                                aria-label="Your email address"
+                                placeholder="Enter your email address"
                                 required
                             />
-                            <button type="submit">Join NOVA <ArrowRight size={17} /></button>
-                        </form>
 
-                        <span className="newsletter-small">
-              Just the good stuff. No unnecessary emails.
-            </span>
+                            <button type="submit">
+                                Subscribe <ArrowRight size={17} />
+                            </button>
+                        </form>
                     </div>
                 </section>
             </main>
 
-            <footer className="footer" id="footer">
-                <div className="footer-main">
+            <footer className="site-footer" id="footer">
+                <div className="container footer-main">
                     <div className="footer-brand">
-                        <a href="#home" className="logo">NOVA<span>.</span></a>
+                        <img src={novaLogo} alt="NOVA" />
                         <p>
-                            Discover more. Shop better. Find the things that make
-                            everyday life a little more special.
+                            Discover products that make everyday life better.
+                            Shop smarter. Live better.
                         </p>
                     </div>
 
                     <div className="footer-column">
-                        <h3>Discover</h3>
+                        <h3>Explore</h3>
                         <a href="#home">Home</a>
                         <a href="#categories">Categories</a>
-                        <a href="#products">Shop Products</a>
+                        <a href="#products">Shop</a>
+                        <a href="#story">About NOVA</a>
                     </div>
 
                     <div className="footer-column">
-                        <h3>Customer Support</h3>
+                        <h3>Categories</h3>
+                        {categories.map((category) => (
+                            <a
+                                href="#products"
+                                key={category.name}
+                                onClick={() => setSelectedCategory(category.name)}
+                            >
+                                {category.name}
+                            </a>
+                        ))}
+                    </div>
+
+                    <div className="footer-column">
+                        <h3>Customer Care</h3>
                         <a href="#footer">Contact Us</a>
-                        <a href="#footer">Shipping & Delivery</a>
-                        <a href="#footer">Returns & Refunds</a>
-                    </div>
-
-                    <div className="footer-column">
-                        <h3>Your Account</h3>
-                        <a href="#login">Sign In</a>
-                        <a href="#register">Create Account</a>
-                        <a href="#cart">Shopping Bag</a>
+                        <a href="#footer">Help Center</a>
+                        <a href="#footer">Privacy Policy</a>
+                        <a href="#footer">Terms & Conditions</a>
                     </div>
                 </div>
 
-                <div className="footer-bottom">
-                    <p>© 2026 NOVA. All rights reserved.</p>
-                    <p>Thoughtfully designed for everyday shopping.</p>
+                <div className="footer-bottom container">
+                    <p>© {new Date().getFullYear()} NOVA. All rights reserved.</p>
+                    <p>Shop smarter. Live better.</p>
                 </div>
             </footer>
-        </div>
+        </>
     )
 }
 

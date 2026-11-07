@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 90">
+    <defs>
+        <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1677FF"/>
+            <stop offset="100%" stop-color="#0755D9"/>
+        </linearGradient>
+    </defs>
+
+    <!-- Shopping bag -->
+    <path d="M14 31 Q14 25 21 25 H65 Q72 25 72 32
+           L77 76 Q78 82 71 82 H15 Q8 82 9 76 Z"
+          fill="url(#blue)"/>
+
+    <!-- Handle -->
+    <path d="M27 30 V21 Q27 8 43 8 Q59 8 59 21 V30"
+          fill="none" stroke="#10234D"
+          stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Letter N -->
+    <path d="M25 42 V67 M25 42 L57 67 V42"
+          fill="none" stroke="#FFFFFF"
+          stroke-width="7" stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+    <!-- Gold accent -->
+    <path d="M8 70 Q42 91 80 49"
+          fill="none" stroke="#FFD629"
+          stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Wordmark -->
+    <text x="91" y="55" font-family="Arial, sans-serif"
+          font-size="43" font-weight="800"
+          letter-spacing="-2" fill="#10234D">NOVA</text>
+
+    <!-- Tagline -->
+    <text x="94" y="73" font-family="Arial, sans-serif"
+          font-size="10" letter-spacing="1.1"
+          fill="#64748B">SHOP SMARTER. LIVE BETTER.</text>
+</svg>
