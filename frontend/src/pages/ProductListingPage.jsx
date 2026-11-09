@@ -12,20 +12,52 @@ import Footer from '../components/Footer'
 import '../App.css'
 
 function ProductListingPage() {
-    const [selectedCategory, setSelectedCategory] = useState('All')
+    const [selectedCategories, setSelectedCategories] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [filtersOpen, setFiltersOpen] = useState(false)
+    const [minPrice, setMinPrice] = useState('')
+    const [maxPrice, setMaxPrice] = useState('')
 
-    const filteredProducts = products.filter((product) => {
+    const categories = [
+        ...new Set(products.map((product) => product.category))
+    ]
+
+    const handleCategoryChange = (category) => {
+        setSelectedCategories((previousCategories) => {
+            if (previousCategories.includes(category)) {
+                return previousCategories.filter(
+                    (item) => item !== category
+                )
+            }
+
+            return [...previousCategories, category]
+        })
+    }
+
+    const isPriceRangeInvalid =
+        minPrice !== '' &&
+        maxPrice !== '' &&
+        Number(minPrice) > Number(maxPrice)
+    const filteredProducts = isPriceRangeInvalid ? [] : products.filter((product) => {
         const matchesCategory =
-            selectedCategory === 'All' ||
-            product.category === selectedCategory
+            selectedCategories.length === 0 ||
+            selectedCategories.includes(product.category)
 
         const matchesSearch = product.name
             .toLowerCase()
             .includes(searchTerm.toLowerCase())
+        const matchesMinPrice =
+            minPrice === '' || product.price >= Number(minPrice)
 
-        return matchesCategory && matchesSearch
+        const matchesMaxPrice =
+            maxPrice === '' || product.price <= Number(maxPrice)
+
+        return (
+            matchesCategory &&
+            matchesSearch &&
+            matchesMinPrice &&
+            matchesMaxPrice
+        )
     })
 
     return (
@@ -38,13 +70,12 @@ function ProductListingPage() {
             />
 
             <main>
-
                 <section className="container">
                     <div className="listing-banner">
                         <div className="listing-banner-content">
-            <span className="listing-eyebrow">
-                DISCOVER THE NOVA COLLECTION
-            </span>
+                            <span className="listing-eyebrow">
+                                DISCOVER THE NOVA COLLECTION
+                            </span>
 
                             <h1>
                                 Find Everything
@@ -70,7 +101,6 @@ function ProductListingPage() {
                     </div>
                 </section>
 
-
                 <section className="container listing-section">
                     <button
                         type="button"
@@ -84,44 +114,74 @@ function ProductListingPage() {
                             className={filtersOpen ? 'filter-chevron-open' : ''}
                         />
                     </button>
-                    <aside className={`listing-sidebar ${filtersOpen ? 'listing-sidebar-open' : ''}`}>
+
+                    <aside
+                        className={`listing-sidebar ${
+                            filtersOpen ? 'listing-sidebar-open' : ''
+                        }`}
+                    >
                         <div className="listing-sidebar-heading">
                             <h2>Filters</h2>
-                            <button type="button">Clear All</button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setSelectedCategories([])
+                                    setMinPrice('')
+                                    setMaxPrice('')
+                                    setSearchTerm('')
+                                }}
+                            >
+                                Clear All
+                            </button>
                         </div>
 
                         <div className="listing-filter-group">
                             <h3>Categories</h3>
 
                             <label>
-                                <input type="checkbox" />
+                                <input
+                                    type="checkbox"
+                                    checked={selectedCategories.length === 0}
+                                    onChange={() => setSelectedCategories([])}
+                                />
                                 All Products
                             </label>
 
-                            <label>
-                                <input type="checkbox" />
-                                Electronics
-                            </label>
-
-                            <label>
-                                <input type="checkbox" />
-                                Fashion
-                            </label>
-
-                            <label>
-                                <input type="checkbox" />
-                                Accessories
-                            </label>
-
-                            <label>
-                                <input type="checkbox" />
-                                Home & Living
-                            </label>
+                            {categories.map((category) => (
+                                <label key={category}>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedCategories.includes(category)}
+                                        onChange={() => handleCategoryChange(category)}
+                                    />
+                                    {category}
+                                </label>
+                            ))}
                         </div>
 
                         <div className="listing-filter-group">
                             <h3>Price Range</h3>
-                            <p>Price filters coming soon</p>
+
+                            <div className="price-inputs">
+                                <input
+                                    type="number"
+                                    placeholder="Min Price"
+                                    value={minPrice}
+                                    onChange={(e) => setMinPrice(e.target.value)}
+                                />
+
+                                <input
+                                    type="number"
+                                    placeholder="Max Price"
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                />
+                            </div>
+                            {isPriceRangeInvalid && (
+                                <p className="price-error">
+                                    Please enter a valid price range.
+                                </p>
+                            )}
                         </div>
 
                         <div className="listing-filter-group">
@@ -134,58 +194,74 @@ function ProductListingPage() {
                         <div className="listing-toolbar">
                             <div>
                                 <h2>Explore Our Products</h2>
-                                <p>Find the perfect products for your lifestyle.</p>
+                                <p>
+                                    Find the perfect products for your lifestyle.
+                                </p>
                             </div>
 
                             <select defaultValue="featured">
                                 <option value="featured">Featured</option>
-                                <option value="low-high">Price: Low to High</option>
-                                <option value="high-low">Price: High to Low</option>
+                                <option value="low-high">
+                                    Price: Low to High
+                                </option>
+                                <option value="high-low">
+                                    Price: High to Low
+                                </option>
                             </select>
                         </div>
 
-
                         <div className="product-grid">
                             {filteredProducts.map((product) => (
-                                <article className="product-card" key={product.id}>
+                                <article
+                                    className="product-card"
+                                    key={product.id}
+                                >
                                     <div className="product-image">
-                                        <img src={product.image} alt={product.name} />
+                                        <img
+                                            src={product.image}
+                                            alt={product.name}
+                                        />
 
                                         {product.tag && (
                                             <span className="product-tag">
-                        {product.tag}
-                    </span>
+                                                {product.tag}
+                                            </span>
                                         )}
                                     </div>
 
                                     <div className="product-info">
-                <span className="product-category">
-                    {product.category}
-                </span>
+                                        <span className="product-category">
+                                            {product.category}
+                                        </span>
 
                                         <h3>{product.name}</h3>
 
                                         <div className="product-rating">
-                                            <Star size={13} fill="currentColor" />
+                                            <Star
+                                                size={13}
+                                                fill="currentColor"
+                                            />
                                             <strong>{product.rating}</strong>
-                                            <span>({product.reviews} reviews)</span>
+                                            <span>
+                                                ({product.reviews} reviews)
+                                            </span>
                                         </div>
 
                                         <div className="product-price">
                                             <strong>${product.price}</strong>
 
                                             {product.oldPrice && (
-                                                <del>${product.oldPrice}</del>
+                                                <del>
+                                                    ${product.oldPrice}
+                                                </del>
                                             )}
                                         </div>
                                     </div>
                                 </article>
                             ))}
                         </div>
-
                     </div>
                 </section>
-
             </main>
 
             <Footer />

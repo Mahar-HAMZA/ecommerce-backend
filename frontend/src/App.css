@@ -1779,3 +1779,41 @@ img {
     display: block;
   }
 }
+
+.price-inputs {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.price-inputs input {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  outline: none;
+  background: var(--white);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 13px;
+  transition: border-color 0.2s ease;
+}
+
+.price-inputs input:focus {
+  border-color: var(--blue);
+}
+
+.price-inputs input::placeholder {
+  color: var(--muted);
+}
+
+.price-error {
+  margin-top: 10px;
+  color: #e00000 !important;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.1px;
+}
