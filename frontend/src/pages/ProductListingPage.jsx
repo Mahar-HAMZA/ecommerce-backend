@@ -17,9 +17,16 @@ function ProductListingPage() {
     const [filtersOpen, setFiltersOpen] = useState(false)
     const [minPrice, setMinPrice] = useState('')
     const [maxPrice, setMaxPrice] = useState('')
+    const [selectedBrands, setSelectedBrands] = useState([])
+    const [sortOption, setSortOption] = useState('featured')
+    const [viewMode, setViewMode] = useState('grid')
 
     const categories = [
         ...new Set(products.map((product) => product.category))
+    ]
+
+    const brands = [
+        ...new Set(products.map((product) => product.brand))
     ]
 
     const handleCategoryChange = (category) => {
@@ -34,6 +41,18 @@ function ProductListingPage() {
         })
     }
 
+    const handleBrandChange = (brand) => {
+        setSelectedBrands((previousBrands) => {
+            if (previousBrands.includes(brand)) {
+                return previousBrands.filter(
+                    (item) => item !== brand
+                )
+            }
+
+            return [...previousBrands, brand]
+        })
+    }
+
     const isPriceRangeInvalid =
         minPrice !== '' &&
         maxPrice !== '' &&
@@ -42,6 +61,10 @@ function ProductListingPage() {
         const matchesCategory =
             selectedCategories.length === 0 ||
             selectedCategories.includes(product.category)
+
+        const matchesBrand =
+            selectedBrands.length === 0 ||
+            selectedBrands.includes(product.brand)
 
         const matchesSearch = product.name
             .toLowerCase()
@@ -54,10 +77,23 @@ function ProductListingPage() {
 
         return (
             matchesCategory &&
+            matchesBrand &&
             matchesSearch &&
             matchesMinPrice &&
             matchesMaxPrice
         )
+    })
+
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+        if (sortOption === 'low-high') {
+            return a.price - b.price
+        }
+
+        if (sortOption === 'high-low') {
+            return b.price - a.price
+        }
+
+        return 0
     })
 
     return (
@@ -126,6 +162,7 @@ function ProductListingPage() {
                                 type="button"
                                 onClick={() => {
                                     setSelectedCategories([])
+                                    setSelectedBrands([])
                                     setMinPrice('')
                                     setMaxPrice('')
                                     setSearchTerm('')
@@ -186,7 +223,17 @@ function ProductListingPage() {
 
                         <div className="listing-filter-group">
                             <h3>Brands</h3>
-                            <p>Brand filters coming soon</p>
+
+                            {brands.map((brand) => (
+                                <label key={brand}>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedBrands.includes(brand)}
+                                        onChange={() => handleBrandChange(brand)}
+                                    />
+                                    {brand}
+                                </label>
+                            ))}
                         </div>
                     </aside>
 
@@ -199,7 +246,10 @@ function ProductListingPage() {
                                 </p>
                             </div>
 
-                            <select defaultValue="featured">
+                            <select
+                                value={sortOption}
+                                onChange={(e) => setSortOption(e.target.value)}
+                            >
                                 <option value="featured">Featured</option>
                                 <option value="low-high">
                                     Price: Low to High
@@ -210,8 +260,31 @@ function ProductListingPage() {
                             </select>
                         </div>
 
-                        <div className="product-grid">
-                            {filteredProducts.map((product) => (
+                        {filteredProducts.length === 0 ? (
+                            <div className="no-products-found">
+                                <h3>No Products Found</h3>
+
+                                <p>
+                                    We couldn't find any products matching your filters.
+                                    Try changing your search or filters.
+                                </p>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setSelectedCategories([])
+                                        setSelectedBrands([])
+                                        setMinPrice('')
+                                        setMaxPrice('')
+                                        setSearchTerm('')
+                                    }}
+                                >
+                                    Clear Filters
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="product-grid">
+                                {sortedProducts.map((product) => (
                                 <article
                                     className="product-card"
                                     key={product.id}
@@ -258,8 +331,9 @@ function ProductListingPage() {
                                         </div>
                                     </div>
                                 </article>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </section>
             </main>
