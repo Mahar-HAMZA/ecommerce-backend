@@ -4,6 +4,8 @@ import {
     SlidersHorizontal,
     ChevronDown,
     Star,
+    Grid2X2,
+    List,
 } from 'lucide-react'
 
 import products from '../data/products'
@@ -246,6 +248,26 @@ function ProductListingPage() {
                                 </p>
                             </div>
 
+                            <div className="view-toggle">
+                                <button
+                                    type="button"
+                                    className={viewMode === 'grid' ? 'active' : ''}
+                                    onClick={() => setViewMode('grid')}
+                                    aria-label="Grid View"
+                                >
+                                    <Grid2X2 size={18} />
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className={viewMode === 'list' ? 'active' : ''}
+                                    onClick={() => setViewMode('list')}
+                                    aria-label="List View"
+                                >
+                                    <List size={18} />
+                                </button>
+                            </div>
+
                             <select
                                 value={sortOption}
                                 onChange={(e) => setSortOption(e.target.value)}
@@ -283,7 +305,13 @@ function ProductListingPage() {
                                 </button>
                             </div>
                         ) : (
-                            <div className="product-grid">
+                            <div
+                                className={
+                                    viewMode === 'grid'
+                                        ? 'product-grid'
+                                        : 'product-list'
+                                }
+                            >
                                 {sortedProducts.map((product) => (
                                 <article
                                     className="product-card"

@@ -686,6 +686,35 @@ img {
   gap: 22px;
 }
 
+/* List View */
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.product-list .product-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.product-list .product-card .product-image {
+  width: 220px;
+  min-width: 220px;
+  height: 180px;
+}
+
+.product-list .product-info {
+  flex: 1;
+}
+
+.product-list .product-card {
+  width: 100%;
+  max-width: 100%;
+}
+
 .product-card {
   min-width: 0;
   overflow: hidden;
@@ -1860,4 +1889,48 @@ img {
 
 .no-products-found button:hover {
   background: var(--blue-dark);
+}
+
+.product-list .product-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: none;
+}
+
+.view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.view-toggle button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-toggle button:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.view-toggle button.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--white);
+}
+
+.view-toggle button.active:hover {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  color: var(--white);
 }
